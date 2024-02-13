@@ -6,11 +6,14 @@ import { Subject, map, switchMap, takeUntil } from 'rxjs';
 import { Todo } from './todo';
 import { TodoService } from './todo.service';
 import { TodoCardComponent } from './todo-card.component';
+import { FormsModule } from '@angular/forms';
+import { MatInput } from '@angular/material/input';
+
 
 @Component({
   selector: 'app-todo-profile',
   standalone: true,
-  imports: [TodoCardComponent, MatCardModule],
+  imports: [TodoCardComponent, MatCardModule, FormsModule , MatInput],
   templateUrl: './todo-profile.component.html',
   styleUrl: './todo-profile.component.scss'
 })
