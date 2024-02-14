@@ -1,49 +1,12 @@
-<div class="flex-row">
-  <div class="flex-1">
-
-    <mat-card class="search-card">
-      <mat-card-header>
-        <mat-card-title class="todo-list-title">Todos</mat-card-title>
-      </mat-card-header>
+@if (this.todo) {
+  <mat-card class="todo-card">
+    <mat-card-header>
+      <mat-card-title class="todo-card-name">{{ this.todo.owner }}</mat-card-title>
+      <mat-card-subtitle class="todo-card-company">{{ this.todo.category }}</mat-card-subtitle>
+    </mat-card-header>
+    @if (!this.simple) {
       <mat-card-content>
-
-        <div class="flex-row gap-8 flex-wrap">
-          <!-- Examples of filtering in Angular -->
-        </div>
-
-        <div class="flex-row gap-8 flex-wrap">
-          <!-- Examples of filtering on the server -->
-
-          <mat-form-field class="input-field">
-            <mat-label>Owner</mat-label>
-            <mat-select (selectionChange)="getTodosFromServer()" [(ngModel)]="todoOwner" data-test="todoOwnerSelect">
-              <mat-option>--</mat-option>
-              <mat-option value="barry">Barry</mat-option>
-              <mat-option value="blanche">Blanche</mat-option>
-              <mat-option value="dawn">Dawn</mat-option>
-              <mat-option value="fry">Fry</mat-option>
-              <mat-option value="roberta">Roberta</mat-option>
-              <mat-option value="workman">Workman</mat-option>
-            </mat-select>
-            <mat-hint>Filtered on server</mat-hint>
-          </mat-form-field>
-        </div>
-
-        <br>
-<div class="flex-row">
-  @if (serverFilteredTodos) {
-    <div class="flex-1">
-      <div>
-        <div class="todo-cards-container flex-row gap-10 flex-wrap">
-          @for (todo of serverFilteredTodos; track by todo._id) {
-            <mat-card class="todo-card">
-             <mat-card-header>
-               <mat-card-title class="todo-card-name">{{ this.todo.owner }}</mat-card-title>
-               <mat-card-subtitle class="todo-card-company">{{ this.todo.category }}</mat-card-subtitle>
-             </mat-card-header>
-           @if (!this.simple) {
-            <mat-card-content>
-             <mat-list>
+        <mat-list>
           <mat-list-item>
             <mat-icon matListItemIcon>dataset</mat-icon>
             <p matListItemTitle>Owner</p>
@@ -51,16 +14,15 @@
             We had to put both the `owner` and `status` entries on a single line. Otherwise
             we got an annoying leading space in front of the values.
             -->
-            <p matListItemLine class="todo-card-role">{{ this.todo.owner }}</p>
+            <p matListItemLine class="todo-card-owner">{{ this.todo.owner }}</p>
           </mat-list-item>
           <mat-divider [inset]=true></mat-divider>
           <mat-list-item>
             <mat-icon matListItemIcon>schedule</mat-icon>
-            <p matListItemTitle>status</p>
-            <p matListItemLine class="todo-card-age">{{ this.todo.status }}</p>
+            <p matListItemTitle>Status</p>
+            <p matListItemLine class="todo-card-status">{{ this.todo.status }}</p>
           </mat-list-item>
           <mat-divider [inset]=true></mat-divider>
-
         </mat-list>
       </mat-card-content>
     }
@@ -71,22 +33,3 @@
     }
 </mat-card>
 }
-} @else {
-  <div class="flex-1" class="todo-error">
-    <mat-error>
-      There was a problem loading the todos. Possibly the server is down or perhaps there are network
-      issues.
-    </mat-error>
-    <mat-error>
-      Please wait a bit and try again or start the server.
-    </mat-error>
-  </div>
-}
-
-<!-- Maybe this should be a pop-up instead of just a text message? Not sure. -->
-
-</div>
-
-<button mat-fab class="add-todo-fab" matTooltip="Add Todo" matTooltipPosition="left" routerLink="/todos/new" data-test="addTodoButton">
-<mat-icon class="md-24" aria-label="Add Todo">add</mat-icon>
-</button>

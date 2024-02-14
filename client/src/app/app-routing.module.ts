@@ -5,7 +5,7 @@ import { UserListComponent } from './users/user-list.component';
 import { UserProfileComponent } from './users/user-profile.component';
 import { AddUserComponent } from './users/add-user.component';
 import { CompanyListComponent } from './company-list/company-list.component';
-import { TodoCardComponent } from './todos/todo-card.component';
+import { TodoListComponent } from './todos/todo-list.component';
 import { TodoProfileComponent } from './todos/todo-profile.component';
 
 // Note that the 'users/new' route needs to come before 'users/:id'.
@@ -17,7 +17,7 @@ const routes: Routes = [
   {path: 'users/new', component: AddUserComponent, title: 'Add User'},
   {path: 'users/:id', component: UserProfileComponent, title: 'User Profile'},
   {path: 'companies', component: CompanyListComponent, title: 'Companies'},
-  {path: 'todos', component: TodoCardComponent, title: 'Todos'},
+  {path: 'todos', component: TodoListComponent, title: 'Todos'},
   {path: 'todos/:id', component: TodoProfileComponent, title: 'Todo Details'}
 
 ];
