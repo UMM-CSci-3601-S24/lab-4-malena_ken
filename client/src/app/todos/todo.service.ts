@@ -31,7 +31,7 @@ export class TodoService {
       }
     }
     // Send the HTTP GET request with the given URL and parameters.
-    // That will return the desired `Observable<User[]>`
+    // That will return the desired `Observable<Todo[]>`
     return this.httpClient.get<Todo[]>(this.todoUrl, {
       params: httpParams,
     });
@@ -47,7 +47,7 @@ export class TodoService {
     return this.httpClient.get<Todo>(`${this.todoUrl}/${id}`);
   }
   /**
-* A service method that filters an array of `User` using
+* A service method that filters an array of `Todo` using
 * the specified filters.
 *
 * Note that the filters here support partial matches. Since the
@@ -55,9 +55,9 @@ export class TodoService {
 * partial matches instead of waiting until we have a full string
 * to match against.
 *
-* @param todos the array of `Users` that we're filtering
+* @param todos the array of `Todos` that we're filtering
 * @param filters the map of key-value pairs used for the filtering
-* @returns an array of `Users` matching the given filters
+* @returns an array of `Todos` matching the given filters
 */
 
   filterTodos(todos: Todo[], filters: { owner?: string}): Todo[] {
