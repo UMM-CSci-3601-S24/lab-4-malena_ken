@@ -1,42 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Todo } from './todo';
 import { RouterLink } from '@angular/router';
-import { MatButton } from '@angular/material/button';
-import { MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from '@angular/material/card';
-import { TodoService } from './todo.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardActions, MatCardContent, MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatError, MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
+import { MatOption, MatSelect } from '@angular/material/select';
 import { Subject, takeUntil } from 'rxjs';
-import { FormsModule } from '@angular/forms';
-import { MatFormField, MatHint, MatLabel, MatOption } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TodoService } from './todo.service';
+
 
 @Component({
-  selector: 'app-todo-card',
-  templateUrl: './todo-card.component.html',
-  styleUrls: ['./todo-card.component.scss'],
-  providers: [],
-  standalone: true,
-  imports: [MatFormField, MatOption, MatHint, MatLabel, FormsModule, MatCard, MatCardHeader, MatCardAvatar, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions, MatButton, RouterLink, MatInput]
+    selector: 'app-todo-card',
+    templateUrl: './todo-card.component.html',
+    styleUrls: ['./todo-card.component.scss'],
+    standalone: true,
+    imports: [MatCardModule, MatButtonModule, MatListModule, MatIconModule, RouterLink, MatFormField, MatLabel, MatSelect, MatOption, MatHint, MatCardContent, MatCardActions, MatError,]
 })
-export class TodoCardComponent {
+export class TodoCardComponent implements OnInit, OnDestroy {
+
+  @Input() todo: Todo;
+  @Input() simple?: boolean = false;
+
   public serverFilteredTodos: Todo[];
-  public todos: Todo[];
+  public filteredTodos: Todo[];
 
   public todoOwner: string;
   public todoStatus: boolean;
   public todoCategory: string;
   public todoBody: string;
-  //public viewType: 'list' | 'card' = 'list';
- // public todoSortBy: SortBy;
-  public limit: number;
 
   errMsg = '';
   private ngUnsubscribe = new Subject<void>();
 
-
   /**
    * This constructor injects both an instance of `TodoService`
    * and an instance of `MatSnackBar` into this component.
+   * `TodoService` lets us interact with the server.
    *
    * @param todoService the `TodoService` used to get todos from the server
    * @param snackBar the `MatSnackBar` used to display feedback
@@ -49,51 +51,67 @@ export class TodoCardComponent {
    * Get the todos from the server, filtered by the role and age specified
    * in the GUI.
    */
-  getTodosFromServer() {
+  getTodosFromServer(): void {
+    // A todo-list-component is paying attention to todoService.getTodos
+    // (which is an Observable<Todo[]>)
+    // (for more on Observable, see: https://reactivex.io/documentation/observable.html)
+    // and we are specifically watching for owner whenever the Todo[] gets updated
     this.todoService.getTodos({
-      // Filter the users by category
-      category: this.todoCategory
+      owner: this.todoOwner
+
     }).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
+      // Next time we see a change in the Observable<Todo[]>,
+      // refer to that Todo[] as returnedTodos here and do the steps in the {}
       next: (returnedTodos) => {
+        // First, update the array of serverFilteredTodos to be the Todo[] in the observable
         this.serverFilteredTodos = returnedTodos;
+        // Then update the filters for our client-side filtering as described in this method
         this.updateFilter();
-        this.serverFilteredTodos = this.todos;
-        //this.updateSorting();
       },
+      // If we observe an error in that Observable, put that message in a snackbar so we can learn more
       error: (err) => {
         if (err.error instanceof ErrorEvent) {
           this.errMsg = `Problem in the client – Error: ${err.error.message}`;
         } else {
           this.errMsg = `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`;
         }
+        this.snackBar.open(
+          this.errMsg,
+          'OK',
+          // The message will disappear after 6 seconds.
+          { duration: 6000 });
       },
-    })
+      // Once the observable has completed successfully
+      // complete: () => console.log('Todos were filtered on the server')
+    });
   }
-  public updateFilter() {
-    this.todos = this.todoService.filterTodos(
-      this.serverFilteredTodos, { body: this.todoBody, owner: this.todoOwner, status: this.todoStatus, limit: this.limit }
-    )
-  }
-
-/*   public updateSorting() {
-    this.todos = this.todoService.sortTodos(this.serverFilteredTodos, this.todoSortBy)
-  } */
 
   /**
- * Starts an asynchronous operation to update the users list
- */
+   * Called when the filtering information is changed in the GUI so we can
+   * get an updated list of `filteredTodos`.
+   */
+  public updateFilter(): void {
+    this.filteredTodos = this.todoService.filterTodos(
+      this.serverFilteredTodos, {  });
+  }
+
+  /**
+   * Starts an asynchronous operation to update the todos list
+   *
+   */
   ngOnInit(): void {
     this.getTodosFromServer();
   }
 
   /**
-* When this component is destroyed, we should unsubscribe to any
-* outstanding requests.
-*/
+   * When this component is destroyed, we should unsubscribe to any
+   * outstanding requests.
+   */
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
+
 }
