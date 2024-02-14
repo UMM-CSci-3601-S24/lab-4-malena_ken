@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Todo } from '../app/todos/todo';
 import { TodoService } from '../app/todos/todo.service';
+import { AppComponent } from 'src/app/app.component';
 
 /**
  * A "mock" version of the `TodoService` that can be used to test components
  * without having to create an actual service. It needs to be `Injectable` since
  * that's how services are typically provided to components.
  */
-@Injectable()
+@Injectable({
+  providedIn: AppComponent
+})
 export class MockTodoService extends TodoService {
   static testTodos: Todo[] = [
     {

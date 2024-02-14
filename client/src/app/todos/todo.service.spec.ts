@@ -137,6 +137,7 @@ describe('TodoService', () => {
     });
   });
 
+
   describe('When getTodoById() is given an ID', () => {
     /* We really don't care what `getTodoById()` returns. Since all the
      * interesting work is happening on the server, `getTodoById()`
@@ -181,6 +182,23 @@ describe('TodoService', () => {
            .toHaveBeenCalledWith(`${todoService.todoUrl}/${targetId}`);
        });
      }));
+
    });
 
+  describe('filterTodos()', () => {
+
+    it('filters by owner', () => {
+      const todoOwner = 'Blanche';
+      const filteredTodos = todoService.filterTodos(testTodos, { owner: todoOwner });
+      expect(filteredTodos.length).toBe(1);
+      filteredTodos.forEach(todo => {
+        expect(todo.owner).toBe(todoOwner);
+      });
   });
+
+  // **OTHER FILTER TESTS GO HERE**
+  });
+
+
+
+});
