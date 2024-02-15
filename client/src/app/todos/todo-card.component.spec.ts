@@ -28,6 +28,7 @@ describe('TodoCardComponent', () => {
       status: true,
       body: 'buy frozen pizzas',
       category: 'groceries',
+      sortby: 'owner'
     };
     fixture.detectChanges();
   });

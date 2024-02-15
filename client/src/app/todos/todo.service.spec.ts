@@ -214,6 +214,15 @@ describe('TodoService', () => {
       });
     });
 
+    it('sorts by owner', () => {
+      const todoSortby = SortBy ;
+      const sortedTodos = todoService.sortTodos(testTodos, { sortBy: todoSortby });
+      expect(sortedTodos.length).toBe(3);
+      sortedTodos.forEach(todo => {
+        expect(todo.status).toBe(todoStatus);
+      });
+    });
+
   });
 
 
