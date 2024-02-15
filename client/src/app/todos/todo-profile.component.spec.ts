@@ -1,186 +1,105 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TestBed, waitForAsync } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { MatCardModule } from '@angular/material/card';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { throwError } from 'rxjs';
+import { ActivatedRouteStub } from '../../testing/activated-route-stub';
+import { MockTodoService } from '../../testing/todo.service.mock';
 import { Todo } from './todo';
+import { TodoCardComponent } from './todo-card.component';
+import { TodoProfileComponent } from './todo-profile.component';
 import { TodoService } from './todo.service';
 
-describe('TodoService', () => {
-  // A small collection of test todos
-  const testTodos: Todo[] = [
-    {
-      _id: 'blanche_id',
-      owner: 'Blanche',
-      status: true,
-      body: 'buy frozen pizzas',
-      category: 'groceries',
-    },
-    {
-      _id: 'fry_id',
-      owner: 'Fry',
-      status: false,
-      body: 'build a new sims game',
-      category: 'video games',
-    },
-    {
-      _id: 'Dawn_id',
-      owner: 'Dawn',
-      status: true,
-      body: 'Write a blog post about JavaScript',
-      category: 'software design',
-    }
-  ];
-  let todoService: TodoService;
-  // These are used to mock the HTTP requests so that we (a) don't have to
-  // have the server running and (b) we can check exactly which HTTP
-  // requests were made to ensure that we're making the correct requests.
-  let httpClient: HttpClient;
-  let httpTestingController: HttpTestingController;
+describe('TodoProfileComponent', () => {
+  let component: TodoProfileComponent;
+  let fixture: ComponentFixture<TodoProfileComponent>;
+  const mockTodoService = new MockTodoService();
+  const fryId = 'fry_id';
+  const activatedRoute: ActivatedRouteStub = new ActivatedRouteStub({
+    // Using the constructor here lets us try that branch in `activated-route-stub.ts`
+    // and then we can choose a new parameter map in the tests if we choose
+    id : fryId
+  });
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+    imports: [
+        RouterTestingModule,
+        MatCardModule,
+        TodoProfileComponent, TodoCardComponent
+    ],
+    providers: [
+        { provide: TodoService, useValue: mockTodoService },
+        { provide: ActivatedRoute, useValue: activatedRoute }
+    ]
+})
+      .compileComponents();
+  }));
 
   beforeEach(() => {
-    // Set up the mock handling of the HTTP requests
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+    fixture = TestBed.createComponent(TodoProfileComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should navigate to a specific todo profile', () => {
+    const expectedTodo: Todo = MockTodoService.testTodos[0];
+    // Setting this should cause anyone subscribing to the paramMap
+    // to update. Our `TodoProfileComponent` subscribes to that, so
+    // it should update right away.
+    activatedRoute.setParamMap({ id: expectedTodo._id });
+    expect(component.todo).toEqual(expectedTodo);
+  });
+
+  it('should navigate to correct todo when the id parameter changes', () => {
+    let expectedTodo: Todo = MockTodoService.testTodos[0];
+    // Setting this should cause anyone subscribing to the paramMap
+    // to update. Our `TodoProfileComponent` subscribes to that, so
+    // it should update right away.
+    activatedRoute.setParamMap({ id: expectedTodo._id });
+    expect(component.todo).toEqual(expectedTodo);
+
+    // Changing the paramMap should update the displayed todo profile.
+    expectedTodo = MockTodoService.testTodos[1];
+    activatedRoute.setParamMap({ id: expectedTodo._id });
+    expect(component.todo).toEqual(expectedTodo);
+  });
+
+  it('should have `null` for the todo for a bad ID', () => {
+    activatedRoute.setParamMap({ id: 'badID' });
+
+    // If the given ID doesn't map to a todo, we expect the service
+    // to return `null`, so we would expect the component's todo
+    // to also be `null`.
+    expect(component.todo).toBeNull();
+  });
+
+  it('should set error data on observable error', () => {
+    activatedRoute.setParamMap({ id: fryId });
+
+    const mockError = { message: 'Test Error', error: { title: 'Error Title' } };
+
+    // const errorResponse = { status: 500, message: 'Server error' };
+    // "Spy" on the `.addTodo()` method in the todo service. Here we basically
+    // intercept any calls to that method and return the error response
+    // defined above.
+    const getTodoSpy = spyOn(mockTodoService, 'getTodoById')
+      .and
+      .returnValue(throwError(() => mockError));
+
+    // component.todo = throwError(() => mockError) as Observable<Todo>;
+
+    component.ngOnInit();
+
+    expect(component.error).toEqual({
+      help: 'There was a problem loading the todo – try again.',
+      httpResponse: mockError.message,
+      message: mockError.error.title,
     });
-    // Construct an instance of the service with the mock
-    // HTTP client.
-    httpClient = TestBed.inject(HttpClient);
-    httpTestingController = TestBed.inject(HttpTestingController);
-    todoService = new TodoService(httpClient);
+    expect(getTodoSpy).toHaveBeenCalledWith(fryId);
   });
-
-  afterEach(() => {
-    // After every test, assert that there are no more pending requests.
-    httpTestingController.verify();
-  });
-
-  describe('When getTodos() is called with no parameters', () => {
-   /* We really don't care what `getTodos()` returns. Since all the
-    * filtering (when there is any) is happening on the server,
-    * `getTodos()` is really just a "pass through" that returns whatever it receives,
-    * without any "post processing" or manipulation. The test in this
-    * `describe` confirms that the HTTP request is properly formed
-    * and sent out in the world, but we don't _really_ care about
-    * what `getTodos()` returns as long as it's what the HTTP
-    * request returns.
-    *
-    * So in this test, we'll keep it simple and have
-    * the (mocked) HTTP request return the entire list `testTodos`
-    * even though in "real life" we would expect the server to
-    * return return a filtered subset of the todos. Furthermore, we
-    * won't actually check what got returned (there won't be an `expect`
-    * about the returned value). Since we don't use the returned value in this test,
-    * It might also be fine to not bother making the mock return it.
-    */
-    it('calls `api/todos`', waitForAsync(() => {
-      // Mock the `httpClient.get()` method, so that instead of making an HTTP request,
-      // it just returns our test data.
-      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testTodos));
-
-      // Call `todoService.getTodos()` and confirm that the correct call has
-      // been made with the correct arguments.
-      //
-      // We have to `subscribe()` to the `Observable` returned by `getTodos()`.
-      // The `todos` argument in the function is the array of Todos returned by
-      // the call to `getTodos()`.
-      todoService.getTodos().subscribe((todos) => {
-        expect(todos)
-          .withContext('returns the test todos')
-          .toBe(testTodos);
-        // The mocked method (`httpClient.get()`) should have been called
-        // exactly one time.
-        expect(mockedMethod)
-          .withContext('one call')
-          .toHaveBeenCalledTimes(1);
-        // The mocked method should have been called with two arguments:
-        //   * the appropriate URL ('/api/todos' defined in the `TodoService`)
-        //   * An options object containing an empty `HttpParams`
-        expect(mockedMethod)
-          .withContext('talks to the correct endpoint')
-          .toHaveBeenCalledWith(todoService.todoUrl, { params: new HttpParams() });
-      });
-    }));
-  });
-
-  describe('When getTodos() is called with parameters, it correctly forms the HTTP request (Javalin/Server filtering)', () => {
-    /*
-    * As in the test of `getTodos()` that takes in no filters in the params,
-    * we really don't care what `getTodos()` returns in the cases
-    * where the filtering is happening on the server. Since all the
-    * filtering is happening on the server, `getTodos()` is really
-    * just a "pass through" that returns whatever it receives, without
-    * any "post processing" or manipulation. So the tests in this
-    * `describe` block all confirm that the HTTP request is properly formed
-    * and sent out in the world, but don't _really_ care about
-    * what `getTodos()` returns as long as it's what the HTTP
-    * request returns.
-    *
-    * So in each of these tests, we'll keep it simple and have
-    * the (mocked) HTTP request return the entire list `testTodos`
-    * even though in "real life" we would expect the server to
-    * return return a filtered subset of the todos. Furthermore, we
-    * won't actually check what got returned (there won't be an `expect`
-    * about the returned value).
-    */
-
-    it('correctly calls api/todos with filter parameter \'owner\'', () => {
-      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testTodos));
-
-      todoService.getTodos({ owner: 'Blanche' }).subscribe(() => {
-        expect(mockedMethod)
-          .withContext('one call')
-          .toHaveBeenCalledTimes(1);
-        expect(mockedMethod)
-          .withContext('talks to the correct endpoint')
-          .toHaveBeenCalledWith(todoService.todoUrl, { params: new HttpParams().set('owner', 'Blanche') });
-      });
-    });
-  });
-
-  describe('When getTodoById() is given an ID', () => {
-    /* We really don't care what `getTodoById()` returns. Since all the
-     * interesting work is happening on the server, `getTodoById()`
-     * is really just a "pass through" that returns whatever it receives,
-     * without any "post processing" or manipulation. The test in this
-     * `describe` confirms that the HTTP request is properly formed
-     * and sent out in the world, but we don't _really_ care about
-     * what `getTodoById()` returns as long as it's what the HTTP
-     * request returns.
-     *
-     * So in this test, we'll keep it simple and have
-     * the (mocked) HTTP request return the `targetTodo`
-     * Furthermore, we won't actually check what got returned (there won't be an `expect`
-     * about the returned value). Since we don't use the returned value in this test,
-     * It might also be fine to not bother making the mock return it.
-     */
-     it('calls api/todos/id with the correct ID', waitForAsync(() => {
-       // We're just picking a Todo "at random" from our little
-       // set of Todos up at the top.
-       const targetTodo: Todo = testTodos[1];
-       const targetId: string = targetTodo._id;
-
-       // Mock the `httpClient.get()` method so that instead of making an HTTP request
-       // it just returns one todo from our test data
-       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(targetTodo));
-
-       // Call `todoService.getTodo()` and confirm that the correct call has
-       // been made with the correct arguments.
-       //
-       // We have to `subscribe()` to the `Observable` returned by `getTodoById()`.
-       // The `todo` argument in the function below is the thing of type Todo returned by
-       // the call to `getTodoById()`.
-       todoService.getTodoById(targetId).subscribe((todo) => {
-         expect(todo).withContext('returns the target todo').toBe(targetTodo);
-         // The `Todo` returned by `getTodoById()` should be targetTodo, but
-         // we don't bother with an `expect` here since we don't care what was returned.
-         expect(mockedMethod)
-           .withContext('one call')
-           .toHaveBeenCalledTimes(1);
-         expect(mockedMethod)
-           .withContext('talks to the correct endpoint')
-           .toHaveBeenCalledWith(`${todoService.todoUrl}/${targetId}`);
-       });
-     }));
-   });
-
-  });
+});

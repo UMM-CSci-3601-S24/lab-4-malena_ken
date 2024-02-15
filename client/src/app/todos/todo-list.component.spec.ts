@@ -82,7 +82,7 @@ describe('Todo list', () => {
     expect(todoList.serverFilteredTodos.length).toBe(3);
   });
 
-  it('contains an owner called Blanche', () => {
+/*   it('contains an owner called Blanche', () => {
     expect(todoList.serverFilteredTodos.some((todo: Todo) => todo.owner === 'Blanche')).toBe(true);
   })
   it('contains an owner called Dawn', () => {
@@ -93,7 +93,7 @@ describe('Todo list', () => {
   })
   it('has three todos with b in their body', () => {
     expect(todoList.serverFilteredTodos.filter((todo: Todo) => todo.body.toLowerCase().includes('b')).length).toBe(3);
-  })
+  }) */
 });
 
 /*

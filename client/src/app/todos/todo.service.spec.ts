@@ -31,9 +31,6 @@ describe('TodoService', () => {
     }
   ];
   let todoService: TodoService;
-  // These are used to mock the HTTP requests so that we (a) don't have to
-  // have the server running and (b) we can check exactly which HTTP
-  // requests were made to ensure that we're making the correct requests.
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
 
@@ -196,19 +193,27 @@ describe('TodoService', () => {
       });
     });
 
-    describe('filterTodos()', () => {
-
-      it('filters by body', () => {
-        const todoBody = 'pizzas';
-        const filteredTodos = todoService.filterTodos(testTodos, { body: todoBody });
-        expect(filteredTodos.length).toBe(1);
-        filteredTodos.forEach(todo => {
-          expect(todo.body.indexOf(todoBody)).toBeGreaterThanOrEqual(0);
-        });
+    it('filters by body', () => {
+      const todoBody = 'pizzas';
+      const filteredTodos = todoService.filterTodos(testTodos, { body: todoBody });
+      expect(filteredTodos.length).toBe(1);
+      filteredTodos.forEach(todo => {
+        expect(todo.body.indexOf(todoBody)).toBeGreaterThanOrEqual(0);
       });
     });
 
-
+    it('filters by status', () => {
+      const todoStatus = true;
+      const filteredTodos = todoService.filterTodos(testTodos, { status: todoStatus });
+      expect(filteredTodos.length).toBe(2);
+      filteredTodos.forEach(todo => {
+        expect(todo.status).toBe(todoStatus);
+      });
+    });
 
   });
+
+
+
 });
+
