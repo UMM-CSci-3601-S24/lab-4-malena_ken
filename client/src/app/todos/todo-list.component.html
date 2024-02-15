@@ -27,6 +27,19 @@
             <mat-hint>Filtered on client</mat-hint>
           </mat-form-field>
 
+          <mat-form-field class="input-field">
+            <mat-label>Sort By</mat-label>
+            <mat-select (selectionChange)="updateSorting()" [(ngModel)]="todoSortBy" data-test="todoSortSelect">
+              <mat-option>--</mat-option>
+              <mat-option value='owner'>Owner</mat-option>
+              <mat-option value='body'>Body</mat-option>
+              <mat-option value='status'>Status</mat-option>
+              <mat-option value='category'>Category</mat-option>
+              <mat-option value='_id'>Id</mat-option>
+            </mat-select>
+            <mat-hint>Sorted on client</mat-hint>
+          </mat-form-field>
+
         </div>
 
         <div class="flex-row gap-8 flex-wrap">
