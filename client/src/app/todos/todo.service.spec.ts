@@ -220,6 +220,7 @@ describe('TodoService', () => {
       filteredTodos.forEach(todo => {
         expect(todo.status).toBe(todoStatus);
         expect(todo.body.indexOf(todoBody)).toBeGreaterThanOrEqual(0);
+        expect(todo.body == 'buy frozen pizzas');
         expect(todo.owner).toBe(todoOwner);
       });
     });
