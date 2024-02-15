@@ -55,23 +55,23 @@ describe('TodoService', () => {
   });
 
   describe('When getTodos() is called with no parameters', () => {
-   /* We really don't care what `getTodos()` returns. Since all the
-    * filtering (when there is any) is happening on the server,
-    * `getTodos()` is really just a "pass through" that returns whatever it receives,
-    * without any "post processing" or manipulation. The test in this
-    * `describe` confirms that the HTTP request is properly formed
-    * and sent out in the world, but we don't _really_ care about
-    * what `getTodos()` returns as long as it's what the HTTP
-    * request returns.
-    *
-    * So in this test, we'll keep it simple and have
-    * the (mocked) HTTP request return the entire list `testTodos`
-    * even though in "real life" we would expect the server to
-    * return return a filtered subset of the todos. Furthermore, we
-    * won't actually check what got returned (there won't be an `expect`
-    * about the returned value). Since we don't use the returned value in this test,
-    * It might also be fine to not bother making the mock return it.
-    */
+    /* We really don't care what `getTodos()` returns. Since all the
+     * filtering (when there is any) is happening on the server,
+     * `getTodos()` is really just a "pass through" that returns whatever it receives,
+     * without any "post processing" or manipulation. The test in this
+     * `describe` confirms that the HTTP request is properly formed
+     * and sent out in the world, but we don't _really_ care about
+     * what `getTodos()` returns as long as it's what the HTTP
+     * request returns.
+     *
+     * So in this test, we'll keep it simple and have
+     * the (mocked) HTTP request return the entire list `testTodos`
+     * even though in "real life" we would expect the server to
+     * return return a filtered subset of the todos. Furthermore, we
+     * won't actually check what got returned (there won't be an `expect`
+     * about the returned value). Since we don't use the returned value in this test,
+     * It might also be fine to not bother making the mock return it.
+     */
     it('calls `api/todos`', waitForAsync(() => {
       // Mock the `httpClient.get()` method, so that instead of making an HTTP request,
       // it just returns our test data.
@@ -154,36 +154,36 @@ describe('TodoService', () => {
      * about the returned value). Since we don't use the returned value in this test,
      * It might also be fine to not bother making the mock return it.
      */
-     it('calls api/todos/id with the correct ID', waitForAsync(() => {
-       // We're just picking a Todo "at random" from our little
-       // set of Todos up at the top.
-       const targetTodo: Todo = testTodos[1];
-       const targetId: string = targetTodo._id;
+    it('calls api/todos/id with the correct ID', waitForAsync(() => {
+      // We're just picking a Todo "at random" from our little
+      // set of Todos up at the top.
+      const targetTodo: Todo = testTodos[1];
+      const targetId: string = targetTodo._id;
 
-       // Mock the `httpClient.get()` method so that instead of making an HTTP request
-       // it just returns one todo from our test data
-       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(targetTodo));
+      // Mock the `httpClient.get()` method so that instead of making an HTTP request
+      // it just returns one todo from our test data
+      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(targetTodo));
 
-       // Call `todoService.getTodo()` and confirm that the correct call has
-       // been made with the correct arguments.
-       //
-       // We have to `subscribe()` to the `Observable` returned by `getTodoById()`.
-       // The `todo` argument in the function below is the thing of type Todo returned by
-       // the call to `getTodoById()`.
-       todoService.getTodoById(targetId).subscribe((todo) => {
-         expect(todo).withContext('returns the target todo').toBe(targetTodo);
-         // The `Todo` returned by `getTodoById()` should be targetTodo, but
-         // we don't bother with an `expect` here since we don't care what was returned.
-         expect(mockedMethod)
-           .withContext('one call')
-           .toHaveBeenCalledTimes(1);
-         expect(mockedMethod)
-           .withContext('talks to the correct endpoint')
-           .toHaveBeenCalledWith(`${todoService.todoUrl}/${targetId}`);
-       });
-     }));
+      // Call `todoService.getTodo()` and confirm that the correct call has
+      // been made with the correct arguments.
+      //
+      // We have to `subscribe()` to the `Observable` returned by `getTodoById()`.
+      // The `todo` argument in the function below is the thing of type Todo returned by
+      // the call to `getTodoById()`.
+      todoService.getTodoById(targetId).subscribe((todo) => {
+        expect(todo).withContext('returns the target todo').toBe(targetTodo);
+        // The `Todo` returned by `getTodoById()` should be targetTodo, but
+        // we don't bother with an `expect` here since we don't care what was returned.
+        expect(mockedMethod)
+          .withContext('one call')
+          .toHaveBeenCalledTimes(1);
+        expect(mockedMethod)
+          .withContext('talks to the correct endpoint')
+          .toHaveBeenCalledWith(`${todoService.todoUrl}/${targetId}`);
+      });
+    }));
 
-   });
+  });
 
   describe('filterTodos()', () => {
 
@@ -194,11 +194,21 @@ describe('TodoService', () => {
       filteredTodos.forEach(todo => {
         expect(todo.owner).toBe(todoOwner);
       });
+    });
+
+    describe('filterTodos()', () => {
+
+      it('filters by body', () => {
+        const todoBody = 'pizzas';
+        const filteredTodos = todoService.filterTodos(testTodos, { body: todoBody });
+        expect(filteredTodos.length).toBe(1);
+        filteredTodos.forEach(todo => {
+          expect(todo.body.indexOf(todoBody)).toBeGreaterThanOrEqual(0);
+        });
+      });
+    });
+
+
+
   });
-
-  // **OTHER FILTER TESTS GO HERE**
-  });
-
-
-
 });
