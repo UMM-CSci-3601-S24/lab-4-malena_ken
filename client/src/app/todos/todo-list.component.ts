@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
-import { Todo } from './todo';
+import { SortBy, Todo } from './todo';
 import { TodoService } from './todo.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -46,6 +46,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   public todoStatus: boolean;
   public todoCategory: string;
   public todoBody: string;
+  public todoSortBy: SortBy;
 
   errMsg = '';
   private ngUnsubscribe = new Subject<void>();
@@ -85,6 +86,8 @@ export class TodoListComponent implements OnInit, OnDestroy {
         this.serverFilteredTodos = returnedTodos;
         // Then update the filters for our client-side filtering as described in this method
         this.updateFilter();
+        this.serverFilteredTodos = this.filteredTodos;
+        this.updateSorting();
       },
       // If we observe an error in that Observable, put that message in a snackbar so we can learn more
       error: (err) => {
@@ -111,6 +114,10 @@ export class TodoListComponent implements OnInit, OnDestroy {
   public updateFilter(): void {
     this.filteredTodos = this.todoService.filterTodos(
       this.serverFilteredTodos, {body: this.todoBody, status: this.todoStatus});
+  }
+
+  public updateSorting(){
+    this.filteredTodos = this.todoService.sortTodos(this.serverFilteredTodos,this.todoSortBy)
   }
 
   /**

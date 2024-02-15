@@ -14,6 +14,7 @@ describe('TodoService', () => {
       status: true,
       body: 'buy frozen pizzas',
       category: 'groceries',
+      sortby: 'owner',
     },
     {
       _id: 'fry_id',
@@ -21,6 +22,7 @@ describe('TodoService', () => {
       status: false,
       body: 'build a new sims game',
       category: 'video games',
+      sortby: 'owner',
     },
     {
       _id: 'Dawn_id',
@@ -28,6 +30,7 @@ describe('TodoService', () => {
       status: true,
       body: 'Write a blog post about JavaScript',
       category: 'software design',
+      sortby: 'owner',
     }
   ];
   let todoService: TodoService;
