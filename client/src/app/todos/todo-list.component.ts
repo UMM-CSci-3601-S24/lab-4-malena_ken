@@ -110,7 +110,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
    */
   public updateFilter(): void {
     this.filteredTodos = this.todoService.filterTodos(
-      this.serverFilteredTodos, {body: this.todoBody, status: this.todoStatus});
+      this.serverFilteredTodos, {body: this.todoBody, status: this.todoStatus, category: this.todoCategory});
   }
 
   /**
