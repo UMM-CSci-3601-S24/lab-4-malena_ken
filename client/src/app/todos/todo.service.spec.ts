@@ -211,6 +211,15 @@ describe('TodoService', () => {
       });
     });
 
+    it('filters by category', () => {
+      const todoCategory = 'software design';
+      const filteredTodos = todoService.filterTodos(testTodos, { category: todoCategory });
+      expect(filteredTodos.length).toBe(1);
+      filteredTodos.forEach(todo => {
+        expect(todo.category.indexOf(todoCategory)).toBeGreaterThanOrEqual(0);
+      });
+    });
+
   });
 
 
