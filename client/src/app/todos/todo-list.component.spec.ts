@@ -48,18 +48,18 @@ describe('Todo list', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [COMMON_IMPORTS, TodoListComponent, TodoCardComponent],
-    // providers:    [ TodoService ]  // NO! Don't provide the real service!
-    // Provide a test-double instead
-    providers: [{ provide: TodoService, useValue: new MockTodoService() }]
-});
+      imports: [COMMON_IMPORTS, TodoListComponent, TodoCardComponent],
+      // providers:    [ TodoService ]  // NO! Don't provide the real service!
+      // Provide a test-double instead
+      providers: [{ provide: TodoService, useValue: new MockTodoService() }]
+    });
   });
 
   // This constructs the `todoList` (declared
   // above) that will be used throughout the tests.
   beforeEach(waitForAsync(() => {
-  // Compile all the components in the test bed
-  // so that everything's ready to go.
+    // Compile all the components in the test bed
+    // so that everything's ready to go.
     TestBed.compileComponents().then(() => {
       /* Create a fixture of the TodoListComponent. That
        * allows us to get an instance of the component
@@ -88,7 +88,12 @@ describe('Todo list', () => {
   it('contains an owner called Dawn', () => {
     expect(todoList.serverFilteredTodos.some((todo: Todo) => todo.owner === 'Dawn')).toBe(true);
   })
-
+  it('has one todo with z in their body', () => {
+    expect(todoList.serverFilteredTodos.filter((todo: Todo) => todo.body.toLowerCase().includes('z')).length).toBe(1);
+  })
+  it('has three todos with b in their body', () => {
+    expect(todoList.serverFilteredTodos.filter((todo: Todo) => todo.body.toLowerCase().includes('b')).length).toBe(3);
+  })
 });
 
 /*
@@ -114,11 +119,11 @@ describe('Misbehaving Todo List', () => {
     };
 
     TestBed.configureTestingModule({
-    imports: [COMMON_IMPORTS, TodoListComponent],
-    // providers:    [ TodoService ]  // NO! Don't provide the real service!
-    // Provide a test-double instead
-    providers: [{ provide: TodoService, useValue: todoServiceStub }]
-});
+      imports: [COMMON_IMPORTS, TodoListComponent],
+      // providers:    [ TodoService ]  // NO! Don't provide the real service!
+      // Provide a test-double instead
+      providers: [{ provide: TodoService, useValue: todoServiceStub }]
+    });
   });
 
   // Construct the `todoList` used for the testing in the `it` statement
@@ -149,7 +154,7 @@ describe('Misbehaving Todo List', () => {
     expect(todoList.errMsg)
       .withContext('the error message will be')
       .toContain('Problem contacting the server – Error Code:');
-      console.log(todoList.errMsg);
+    console.log(todoList.errMsg);
   });
 
 

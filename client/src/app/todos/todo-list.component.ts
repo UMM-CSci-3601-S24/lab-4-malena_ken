@@ -29,15 +29,15 @@ import { MatCardModule } from '@angular/material/card';
  * makes the most sense to do the filtering.
  */
 @Component({
-    selector: 'app-todo-list-component',
-    templateUrl: 'todo-list.component.html',
-    styleUrls: ['./todo-list.component.scss'],
-    providers: [],
-    standalone: true,
-    imports: [MatCardModule, MatFormFieldModule, MatInputModule, FormsModule, MatSelectModule, MatOptionModule, MatRadioModule, TodoCardComponent, MatListModule, RouterLink, MatButtonModule, MatTooltipModule, MatIconModule]
+  selector: 'app-todo-list-component',
+  templateUrl: 'todo-list.component.html',
+  styleUrls: ['./todo-list.component.scss'],
+  providers: [],
+  standalone: true,
+  imports: [MatCardModule, MatFormFieldModule, MatInputModule, FormsModule, MatSelectModule, MatOptionModule, MatRadioModule, TodoCardComponent, MatListModule, RouterLink, MatButtonModule, MatTooltipModule, MatIconModule]
 })
 
-export class TodoListComponent implements OnInit, OnDestroy  {
+export class TodoListComponent implements OnInit, OnDestroy {
   // These are public so that tests can reference them (.spec.ts)
   public serverFilteredTodos: Todo[];
   public filteredTodos: Todo[];
@@ -110,7 +110,7 @@ export class TodoListComponent implements OnInit, OnDestroy  {
    */
   public updateFilter(): void {
     this.filteredTodos = this.todoService.filterTodos(
-      this.serverFilteredTodos, {  });
+      this.serverFilteredTodos, {body: this.todoBody});
   }
 
   /**

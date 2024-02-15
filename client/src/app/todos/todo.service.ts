@@ -60,7 +60,7 @@ export class TodoService {
 * @returns an array of `Todos` matching the given filters
 */
 
-  filterTodos(todos: Todo[], filters: { owner?: string}): Todo[] {
+  filterTodos(todos: Todo[], filters: { owner?: string, body?: string }): Todo[] {
     let filteredTodos = todos;
 
     // Filter by owner
@@ -68,6 +68,13 @@ export class TodoService {
       filters.owner = filters.owner.toLowerCase();
       filteredTodos = filteredTodos.filter(todo => todo.owner.toLowerCase().indexOf(filters.owner) !== -1);
     }
+
+    if (filters.body) {
+      filters.body = filters.body.toLowerCase();
+      filteredTodos = filteredTodos.filter(todo => todo.body.toLowerCase().indexOf(filters.body) !== -1);
+    }
+
+
 
     return filteredTodos;
   }
