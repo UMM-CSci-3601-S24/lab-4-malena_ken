@@ -220,6 +220,20 @@ describe('TodoService', () => {
       });
     });
 
+    it('combination of filters status, body, and owner', () => {
+      const todoStatus = false;
+      const todoBody = 'sims';
+      const todoOwner = 'Fry';
+      const filteredTodos = todoService.filterTodos(testTodos, { status: todoStatus, body: todoBody, owner: todoOwner });
+      expect(filteredTodos.length).toBe(1);
+      filteredTodos.forEach(todo => {
+        expect(todo.status).toBe(todoStatus);
+        expect(todo.body.indexOf(todoBody)).toBeGreaterThanOrEqual(0);
+        expect(todo.body == 'buy frozen pizzas');
+        expect(todo.owner).toBe(todoOwner);
+      });
+    });
+
   });
 
 
