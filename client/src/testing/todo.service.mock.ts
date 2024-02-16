@@ -20,6 +20,7 @@ export class MockTodoService extends TodoService {
       status: true,
       body: 'buy frozen pizzas',
       category: 'groceries',
+      sortBy: 'owner',
     },
     {
       _id: 'fry_id',
@@ -27,6 +28,7 @@ export class MockTodoService extends TodoService {
       status: false,
       body: 'build a new sims game',
       category: 'video games',
+      sortBy: '_id',
     },
     {
       _id: 'Dawn_id',
@@ -34,6 +36,7 @@ export class MockTodoService extends TodoService {
       status: true,
       body: 'Write a blog post about JavaScript',
       category: 'software design',
+      sortBy: 'category',
     }
   ];
 

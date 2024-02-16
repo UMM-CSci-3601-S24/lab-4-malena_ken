@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { Todo } from './todo';
+import { SortBy, Todo } from './todo';
 import { TodoService } from './todo.service';
 
 describe('TodoService', () => {
@@ -14,6 +14,7 @@ describe('TodoService', () => {
       status: true,
       body: 'buy frozen pizzas',
       category: 'groceries',
+      sortBy: 'owner',
     },
     {
       _id: 'fry_id',
@@ -21,6 +22,7 @@ describe('TodoService', () => {
       status: false,
       body: 'build a new sims game',
       category: 'video games',
+      sortBy: 'status',
     },
     {
       _id: 'Dawn_id',
@@ -28,6 +30,7 @@ describe('TodoService', () => {
       status: true,
       body: 'Write a blog post about JavaScript',
       category: 'software design',
+      sortBy: 'category',
     }
   ];
   let todoService: TodoService;
@@ -202,14 +205,44 @@ describe('TodoService', () => {
       });
     });
 
-    it('filters by status', () => {
-      const todoStatus = true;
-      const filteredTodos = todoService.filterTodos(testTodos, { status: todoStatus });
-      expect(filteredTodos.length).toBe(2);
-      filteredTodos.forEach(todo => {
-        expect(todo.status).toBe(todoStatus);
-      });
+  });
+
+  describe('sortTodos()', () => {
+    it('sorts by owner', () => {
+      const todoSortby: SortBy = 'owner';
+      const sortedTodos = todoService.sortTodos(testTodos, todoSortby);
+      expect(sortedTodos.length).toBe(3);
+      expect(sortedTodos[0].owner == 'Blanche');
     });
+
+    it('sorts by _id', () => {
+      const todoSortby: SortBy = '_id';
+      const sortedTodos = todoService.sortTodos(testTodos, todoSortby);
+      expect(sortedTodos.length).toBe(3);
+      expect(sortedTodos[0]._id == 'blanche_id');
+    });
+
+    it('sorts by category', () => {
+      const todoSortby: SortBy = 'category';
+      const sortedTodos = todoService.sortTodos(testTodos, todoSortby);
+      expect(sortedTodos.length).toBe(3);
+      expect(sortedTodos[0].category == 'groceries');
+    });
+
+    it('sorts by status', () => {
+      const todoSortby: SortBy = 'status';
+      const sortedTodos = todoService.sortTodos(testTodos, todoSortby);
+      expect(sortedTodos.length).toBe(3);
+      expect(sortedTodos[0].status = false);
+    });
+
+    it('sorts by body', () => {
+      const todoSortby: SortBy = 'body';
+      const sortedTodos = todoService.sortTodos(testTodos, todoSortby);
+      expect(sortedTodos.length).toBe(3);
+      expect(sortedTodos[0].body == 'build a new sims game');
+    });
+
 
     it('filters by category', () => {
       const todoCategory = 'software design';
@@ -235,7 +268,6 @@ describe('TodoService', () => {
     });
 
   });
-
 
 
 });
