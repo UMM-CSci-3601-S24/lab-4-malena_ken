@@ -60,7 +60,7 @@ export class TodoService {
 * @returns an array of `Todos` matching the given filters
 */
 
-  filterTodos(todos: Todo[], filters: { owner?: string, body?: string, status?: boolean }): Todo[] {
+  filterTodos(todos: Todo[], filters: { owner?: string, body?: string, status?: boolean, category?: string }): Todo[] {
     let filteredTodos = todos;
 
     // Filter by owner
@@ -78,6 +78,11 @@ export class TodoService {
     // Filters by status
     if (filters.status !== undefined) {
       filteredTodos = filteredTodos.filter(todo => todo.status === filters.status);
+    }
+    // Filter by category
+    if (filters.category) {
+      filters.category = filters.category.toLowerCase();
+      filteredTodos = filteredTodos.filter(todo => todo.category.toLowerCase().indexOf(filters.category) !== -1);
     }
 
     return filteredTodos;
