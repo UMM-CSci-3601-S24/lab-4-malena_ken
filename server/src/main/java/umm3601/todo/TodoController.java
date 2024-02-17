@@ -38,17 +38,17 @@ public class TodoController {
 
 
   public void getTodos(Context ctx) {
-    int limit = 0;
-    if (ctx.queryParamMap().containsKey("limit")) {
-      limit = ctx.queryParamAsClass("limit", Integer.class)
-        .check(it -> it >= 0, "Limit size should be non-negative")
-        .get();
-    }
+    //int limit = 0;
+    //if (ctx.queryParamMap().containsKey("limit")) {
+      //limit = ctx.queryParamAsClass("limit", Integer.class)
+        //.check(it -> it >= 0, "Limit size should be non-negative")
+        //.get();
+    //}
 
 
     ArrayList<Todo> todos = todoCollection
         .find()
-        .limit(limit)
+        //.limit(limit)
         .into(new ArrayList<>());
 
 

@@ -1,14 +1,20 @@
 package umm3601.todo;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 //import org.bson.types.ObjectId;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,12 +36,14 @@ import com.mongodb.client.MongoDatabase;
 
 import io.javalin.http.Context;
 //import umm3601.todo.TodoController;
+import io.javalin.http.HttpStatus;
 
 
 public class TodoControllerSpec {
 
 
   private TodoController todoController;
+  private ObjectId frysId;
 
 
   // The client and database that will be used
@@ -124,15 +132,38 @@ public class TodoControllerSpec {
       .append("category", "video games")
       .append("body", "Todo 4"));
 
+      frysId = new ObjectId();
+      Document fry = new Document()
+      .append("_id", "todo_5")
+      .append("owner", "Fry")
+      .append("status", true)
+      .append("category", "groceries")
+      .append("body", "Todo 5");
+
 
 todoDocuments.insertMany(testTodos);
+todoDocuments.insertOne(fry);
+
 todoController = new TodoController(db);
   }
 
 
+  //@Test
+  //void canGetLimitedNumberOfTodos() throws IOException {
+    //todoController.getTodos(ctx);
+  //}
+
   @Test
-  void canGetLimitedNumberOfTodos() throws IOException {
+  void canGetAllTodos() throws IOException {
+
+    when(ctx.queryParamMap()).thenReturn(Collections.emptyMap());
+
     todoController.getTodos(ctx);
+
+    verify(ctx).json(todoArrayListCaptor.capture());
+    verify(ctx).status(HttpStatus.OK);
+
+    assertEquals(db.getCollection("todos").countDocuments(), todoArrayListCaptor.getValue().size());
   }
 
 
