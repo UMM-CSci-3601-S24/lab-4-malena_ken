@@ -25,9 +25,11 @@ import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
+import umm3601.Controller;
 
-public class TodoController {
+public class TodoController implements Controller {
   private static final String API_TODOS = "/api/todos";
+  private static final String API_TODO_BY_ID = "/api/todos/{id}";
   private final JacksonMongoCollection<Todo> todoCollection;
 
   static final String OWNER_KEY = "owner";
@@ -117,6 +119,7 @@ public class TodoController {
   }
 
   public void addRoutes(Javalin server) {
+    server.get(API_TODO_BY_ID, this::getTodo);
     server.get(API_TODOS, this::getTodos);
   }
 

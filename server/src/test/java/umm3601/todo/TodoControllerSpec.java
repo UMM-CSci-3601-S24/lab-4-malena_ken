@@ -44,10 +44,6 @@ public class TodoControllerSpec {
   @SuppressWarnings({ "MagicNumber" })
   private TodoController todoController;
   private ObjectId fryId;
-  private ObjectId chrisId;
-  private ObjectId patId;
-  private ObjectId jakeId;
-  private ObjectId blancheId;
 
   // The client and database that will be used
   // for all the tests in this spec file.
@@ -93,28 +89,28 @@ public class TodoControllerSpec {
     List<Document> testTodos = new ArrayList<>();
     testTodos.add(
         new Document()
-            .append("_id", "todo_0")
-            .append("owner", chrisId)
+
+            .append("owner", "Chris")
             .append("status", false)
             .append("category", "homework")
             .append("body", "Todo 0"));
     testTodos.add(
         new Document()
-            .append("_id", patId)
+
             .append("owner", "Pat")
             .append("status", true)
             .append("category", "software design")
             .append("body", "Todo 1"));
     testTodos.add(
         new Document()
-            .append("_id", jakeId)
+
             .append("owner", "Jake")
             .append("status", true)
             .append("category", "homework")
             .append("body", "Todo 2"));
     testTodos.add(
         new Document()
-            .append("_id", blancheId)
+
             .append("owner", "Blanche")
             .append("status", true)
             .append("category", "software design")
@@ -128,7 +124,7 @@ public class TodoControllerSpec {
         .append("category", "groceries")
         .append("body", "Todo 5");
 
-    // todoDocuments.insertMany(testTodos);
+    todoDocuments.insertMany(testTodos);
     todoDocuments.insertOne(fry);
 
     todoController = new TodoController(db);
