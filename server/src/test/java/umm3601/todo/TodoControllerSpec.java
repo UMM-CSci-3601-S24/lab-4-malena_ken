@@ -42,7 +42,7 @@ import io.javalin.http.Context;
 //import io.javalin.http.HttpStatus;
 //import io.javalin.json.JavalinJackson;
 import io.javalin.http.HttpStatus;
-import umm3601.user.UserController;
+//import umm3601.user.UserController;
 
 
 public class TodoControllerSpec {
@@ -50,6 +50,10 @@ public class TodoControllerSpec {
   @SuppressWarnings({ "MagicNumber" })
   private TodoController todoController;
   private ObjectId frysId;
+  private ObjectId chrisId;
+  private ObjectId patId;
+  private ObjectId jakeId;
+  private ObjectId blancheId;
 
 
   // The client and database that will be used
@@ -106,38 +110,31 @@ public class TodoControllerSpec {
     testTodos.add(
       new Document()
       .append("_id", "todo_0")
-      .append("owner", "Chris")
+      .append("owner", chrisId)
       .append("status", false)
       .append("category", "homework")
       .append("body", "Todo 0"));
       testTodos.add(
       new Document()
-      .append("_id", "todo_1")
+      .append("_id", patId)
       .append("owner", "Pat")
       .append("status", true)
       .append("category", "software design")
       .append("body", "Todo 1"));
       testTodos.add(
       new Document()
-      .append("_id", "todo_2")
+      .append("_id", jakeId)
       .append("owner", "Jake")
       .append("status", true)
       .append("category", "homework")
       .append("body", "Todo 2"));
       testTodos.add(
       new Document()
-      .append("_id", "todo_3")
+      .append("_id", blancheId)
       .append("owner", "Blanche")
       .append("status", true)
       .append("category", "software design")
       .append("body", "Todo 3"));
-      testTodos.add(
-      new Document()
-      .append("_id", "todo_4")
-      .append("owner", "Fry")
-      .append("status", false)
-      .append("category", "video games")
-      .append("body", "Todo 4"));
 
       frysId = new ObjectId();
       Document fry = new Document()
@@ -148,17 +145,12 @@ public class TodoControllerSpec {
       .append("body", "Todo 5");
 
 
-todoDocuments.insertMany(testTodos);
+//todoDocuments.insertMany(testTodos);
 todoDocuments.insertOne(fry);
 
 todoController = new TodoController(db);
   }
 
-
-  //@Test
-  //void canGetLimitedNumberOfTodos() throws IOException {
-    //todoController.getTodos(ctx);
-  //}
 
   @Test
   public void canBuildController() throws IOException {
