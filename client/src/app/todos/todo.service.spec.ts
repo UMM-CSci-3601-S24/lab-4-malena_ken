@@ -267,6 +267,16 @@ describe('TodoService', () => {
       });
     });
 
+    it('combination of filter by status with a limit',() => {
+      const todoStatus = true;
+      const todoLimit = 1;
+      const filteredTodos = todoService.filterTodos(testTodos, { status: todoStatus, limit: todoLimit });
+      expect(filteredTodos.length).toBe(1);
+      filteredTodos.forEach(todo => {
+        expect(todo.status).toBe(todoStatus);
+      });
+    });
+
   });
 
 
