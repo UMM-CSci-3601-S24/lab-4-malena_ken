@@ -6,7 +6,8 @@ import static com.mongodb.client.model.Filters.regex;
 import static com.mongodb.client.model.Filters.eq;
 
 import java.util.regex.Pattern;
-
+import java.util.List;
+import java.util.Objects;
 import java.util.ArrayList;
 
 import org.bson.Document;
@@ -24,11 +25,6 @@ import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
-
-import java.util.List;
-import java.util.Objects;
-
-
 
 public class TodoController {
   private static final String API_TODOS = "/api/todos";
@@ -50,7 +46,7 @@ public class TodoController {
    *
    * @param ctx a Javalin HTTP context
    */
-  public void getUser(Context ctx) {
+  public void getTodo(Context ctx) {
     String id = ctx.pathParam("id");
     Todo todo;
 
