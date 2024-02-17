@@ -47,6 +47,13 @@
             <mat-hint>Sorted on client</mat-hint>
           </mat-form-field>
 
+          <mat-form-field class="input-field">
+            <mat-label>Limit</mat-label>
+            <input matInput data-test="todoLimitInput" placeholder="Limit todos" [(ngModel)]="limit" type="number"
+              min="1" (input)="updateFilter()" />
+            <mat-hint>Limited on client</mat-hint>
+          </mat-form-field>
+
         </div>
 
         <div class="flex-row gap-8 flex-wrap">
