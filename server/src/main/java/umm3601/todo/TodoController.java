@@ -3,7 +3,7 @@ package umm3601.todo;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.regex;
-import static com.mongodb.client.model.Filters.eq;
+//import static com.mongodb.client.model.Filters.eq;
 
 import java.util.regex.Pattern;
 
@@ -40,11 +40,6 @@ public class TodoController {
   }
 
 
-
-
-  public void addRoutes(Javalin server) {
-    server.get(API_TODOS, this::getTodos);
-  }
 
 
   public void getTodos(Context ctx) {
@@ -98,5 +93,10 @@ public class TodoController {
     Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
     return sortingOrder;
   }
+
+  public void addRoutes(Javalin server) {
+    server.get(API_TODOS, this::getTodos);
+  }
+
 }
 
