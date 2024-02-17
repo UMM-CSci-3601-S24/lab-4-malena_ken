@@ -154,8 +154,8 @@ public class TodoControllerSpec {
   @Test
   void canGetTodosWithOwner() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(TodoController.OWNER_KEY, Arrays.asList(new String[] { "Fry" }));
-    queryParams.put(TodoController.SORT_ORDER_KEY, Arrays.asList(new String[] { "desc" }));
+    queryParams.put(TodoController.OWNER_KEY, Arrays.asList(new String[] {"Fry"}));
+    queryParams.put(TodoController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
     when(ctx.queryParam(TodoController.OWNER_KEY)).thenReturn("Fry");
     when(ctx.queryParam(TodoController.SORT_ORDER_KEY)).thenReturn("desc");
