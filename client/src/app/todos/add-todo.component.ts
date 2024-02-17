@@ -30,7 +30,10 @@ export class AddTodoComponent {
       Validators.maxLength(50),
     ])),
 
-    status: new FormControl(''),
+    status: new FormControl('true', Validators.compose([
+      Validators.required,
+      Validators.pattern('^(true|false)$'),
+    ])),
 
     // We don't need a special validator just for our app here, but there is a default one for email.
     // We will require the email, though.
@@ -57,6 +60,11 @@ export class AddTodoComponent {
 
     category: [
       {type: 'required', message: 'Category is required'}
+    ],
+
+    status: [
+      {type: 'required', message: 'Status is required'},
+      {type: 'pattern', message: 'Status must be true or false'}
     ],
   };
 

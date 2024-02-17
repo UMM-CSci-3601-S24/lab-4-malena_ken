@@ -129,6 +129,35 @@ describe('AddTodoComponent', () => {
     });
   });
 
+  describe('The status field', () => {
+    let statusControl: AbstractControl;
+
+    beforeEach(() => {
+      statusControl = addTodoForm.controls.status;
+    });
+
+    it('should not allow empty values', () => {
+      statusControl.setValue('');
+      expect(statusControl.valid).toBeFalsy();
+      expect(statusControl.hasError('required')).toBeTruthy();
+    });
+
+    it('should allow "true"', () => {
+      statusControl.setValue('true');
+      expect(statusControl.valid).toBeTruthy();
+    });
+
+    it('should allow "false"', () => {
+      statusControl.setValue('false');
+      expect(statusControl.valid).toBeTruthy();
+    });
+
+    it('should not allow "Supreme Overlord"', () => {
+      statusControl.setValue('Supreme Overlord');
+      expect(statusControl.valid).toBeFalsy();
+    });
+  });
+
 
   describe('getErrorMessage()', () => {
     it('should return the correct error message', () => {
