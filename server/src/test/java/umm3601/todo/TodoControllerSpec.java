@@ -1,15 +1,16 @@
 package umm3601.todo;
 
 
-//import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-//import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-//import java.util.Collections;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,8 @@ import io.javalin.http.Context;
 //import umm3601.todo.TodoController;
 //import io.javalin.http.HttpStatus;
 //import io.javalin.json.JavalinJackson;
+import io.javalin.http.HttpStatus;
+import umm3601.user.UserController;
 
 
 public class TodoControllerSpec {
@@ -165,7 +168,8 @@ todoController = new TodoController(db);
     verify(mockServer, Mockito.atLeast(0)).get(any(), any());
   }
 
-  /*
+
+
   @Test
   void canGetAllTodos() throws IOException {
 
@@ -177,8 +181,26 @@ todoController = new TodoController(db);
     verify(ctx).status(HttpStatus.OK);
 
     assertEquals(db.getCollection("todos").countDocuments(), todoArrayListCaptor.getValue().size());
-  }*/
+  }
 
+  @Test
+  void canGetTodosWithOwner() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put(TodoController.OWNER_KEY, Arrays.asList(new String[] {"Fry"}));
+    queryParams.put(TodoController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+    when(ctx.queryParam(TodoController.OWNER_KEY)).thenReturn("Fry");
+    when(ctx.queryParam(TodoController.SORT_ORDER_KEY)).thenReturn("desc");
+
+    todoController.getTodos(ctx);
+
+    verify(ctx).json(todoArrayListCaptor.capture());
+    verify(ctx).status(HttpStatus.OK);
+
+    for (Todo todo : todoArrayListCaptor.getValue()) {
+      assertEquals("Fry", todo.owner);
+    }
+  }
 
 
 
