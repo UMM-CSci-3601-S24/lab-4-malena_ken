@@ -24,8 +24,10 @@
 
             <mat-form-field>
               <mat-label>Status</mat-label>
-              <input matInput formControlName="status"
-                required>
+              <mat-select formControlName="status" required>
+                <mat-option [value]='true'>Complete</mat-option>
+                <mat-option [value]='false'>Incomplete</mat-option>
+              </mat-select>
             </mat-form-field>
 
             <mat-form-field>

@@ -279,6 +279,29 @@ describe('TodoService', () => {
 
   });
 
+  describe('Adding a todo using `addTodo()`', () => {
+    it('talks to the right endpoint and is called once', waitForAsync(() => {
+      const todo_id = 'pat_id';
+      const expected_http_response = { id: todo_id } ;
+
+      // Mock the `httpClient.addTodo()` method, so that instead of making an HTTP request,
+      // it just returns our expected HTTP response.
+      const mockedMethod = spyOn(httpClient, 'post')
+        .and
+        .returnValue(of(expected_http_response));
+
+      todoService.addTodo(testTodos[1]).subscribe((new_todo_id) => {
+        expect(new_todo_id).toBe(todo_id);
+        expect(mockedMethod)
+          .withContext('one call')
+          .toHaveBeenCalledTimes(1);
+        expect(mockedMethod)
+          .withContext('talks to the correct endpoint')
+          .toHaveBeenCalledWith(todoService.todoUrl, testTodos[1]);
+      });
+    }));
+  });
+
 
 });
 
