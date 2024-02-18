@@ -834,7 +834,7 @@ class UserControllerSpec {
 
   /**
    * Test that the `generateAvatar` throws a `NoSuchAlgorithmException`
-   * if it can't find the `md5` hashing algortihm.
+   * if it can't find the `md5` hashing algorithm.
    *
    * To test this code, we need to mock out the `md5()` method so we
    * can control what it returns. In particular, we want `.md5()` to
