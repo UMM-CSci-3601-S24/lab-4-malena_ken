@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 //import { TodoRole } from './todo';
@@ -30,9 +30,9 @@ export class AddTodoComponent {
       Validators.maxLength(50),
     ])),
 
-    status: new FormControl('true', Validators.compose([
+    status: new UntypedFormControl('', Validators.compose([
       Validators.required,
-      Validators.pattern('^(true|false)$'),
+      Validators.pattern('^(Complete|Incomplete)$'),
     ])),
 
     // We don't need a special validator just for our app here, but there is a default one for email.
@@ -64,7 +64,7 @@ export class AddTodoComponent {
 
     status: [
       {type: 'required', message: 'Status is required'},
-      {type: 'pattern', message: 'Status must be true or false'}
+      {type: "pattern", message: 'Status must be either Complete or Incomplete'}
     ],
   };
 
@@ -85,7 +85,6 @@ export class AddTodoComponent {
         return message;
       }
     }
-    return 'Unknown error';
   }
 
   submitForm() {

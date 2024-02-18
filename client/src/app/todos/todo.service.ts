@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { SortBy, Todo } from './todo';
 
@@ -110,5 +110,9 @@ export class TodoService {
       sortedTodos.sort((todo1,todo2) => todo1.body.localeCompare(todo2.body))
     }
     return sortedTodos;
+  }
+
+  addTodo(newTodo: Partial<Todo>): Observable<string> {
+    return this.httpClient.post<{id: string}>(this.todoUrl, newTodo).pipe(map(res => res.id));
   }
 }

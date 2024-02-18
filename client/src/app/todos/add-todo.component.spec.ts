@@ -59,7 +59,7 @@ describe('AddTodoComponent', () => {
     expect(addTodoForm.valid).toBeFalsy();
   });
 
-  describe('The name field', () => {
+  describe('The owner field', () => {
     let ownerControl: AbstractControl;
 
     beforeEach(() => {
@@ -100,32 +100,31 @@ describe('AddTodoComponent', () => {
       expect(ownerControl.valid).toBeTruthy();
     });
 
-    it('should fail if we provide an "existing" owner', () => {
-      // We're assuming that "abc123" and "123abc" already
-      // exist so we disallow them.
+    it('should allow an "existing" owner', () => {
+      // We're assuming that "abc123" and "123abc" already exist.
       ownerControl.setValue('abc123');
-      expect(ownerControl.valid).toBeFalsy();
-      expect(ownerControl.hasError('existingOwner')).toBeTruthy();
+      expect(ownerControl.valid).toBeTruthy();
+      expect(ownerControl.hasError('existingOwner')).toBeFalsy();
 
       ownerControl.setValue('123abc');
-      expect(ownerControl.valid).toBeFalsy();
-      expect(ownerControl.hasError('existingOwner')).toBeTruthy();
+      expect(ownerControl.valid).toBeTruthy();
+      expect(ownerControl.hasError('existingOwner')).toBeFalsy();
     });
   });
 
   describe('The body field', () => {
-    it('should allow empty values', () => {
+    it('should not allow empty values', () => {
       const bodyControl = addTodoForm.controls.body;
       bodyControl.setValue('');
-      expect(bodyControl.valid).toBeTruthy();
+      expect(bodyControl.valid).toBeFalsy();
     });
   });
 
   describe('The category field', () => {
-    it('should allow empty values', () => {
+    it('should not allow empty values', () => {
       const categoryControl = addTodoForm.controls.category;
       categoryControl.setValue('');
-      expect(categoryControl.valid).toBeTruthy();
+      expect(categoryControl.valid).toBeFalsy();
     });
   });
 
@@ -142,13 +141,13 @@ describe('AddTodoComponent', () => {
       expect(statusControl.hasError('required')).toBeTruthy();
     });
 
-    it('should allow "true"', () => {
-      statusControl.setValue('true');
+    it('should allow "Incomplete"', () => {
+      statusControl.setValue('Incomplete');
       expect(statusControl.valid).toBeTruthy();
     });
 
-    it('should allow "false"', () => {
-      statusControl.setValue('false');
+    it('should allow "Complete"', () => {
+      statusControl.setValue('Complete');
       expect(statusControl.valid).toBeTruthy();
     });
 
@@ -164,7 +163,7 @@ describe('AddTodoComponent', () => {
 
       let controlName: keyof typeof addTodoComponent.addTodoValidationMessages = 'owner';
       addTodoComponent.addTodoForm.get(controlName).setErrors({'required': true});
-      expect(addTodoComponent.getErrorMessage(controlName)).toEqual('Name is required');
+      expect(addTodoComponent.getErrorMessage(controlName)).toEqual('Owner is required');
 
       // We don't need the type statement here because we're not using the
       // same (previously typed) variable. We could use a `let` and the type statement
@@ -235,7 +234,7 @@ describe('AddTodoComponent#submitForm()', () => {
 
     fixture.ngZone.run(() => {
 
-      const addTodoSpy = spyOn(todoService, 'addTodo').and.returnValue(of(1));
+      const addTodoSpy = spyOn(todoService, 'addTodo').and.returnValue(of('1'));
       component.submitForm();
 
       expect(addTodoSpy).toHaveBeenCalledWith(component.addTodoForm.value);
