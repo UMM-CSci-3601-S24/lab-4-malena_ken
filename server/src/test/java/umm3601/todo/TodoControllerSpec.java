@@ -3,6 +3,8 @@ package umm3601.todo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+//import static org.mockito.ArgumentMatchers.eq;
+import static com.mongodb.client.model.Filters.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -201,6 +203,40 @@ public class TodoControllerSpec {
     assertThrows(NotFoundResponse.class, () -> {
       todoController.getTodo(ctx);
     });
+  }
+
+
+
+  @Test
+  void deleteFoundTodo() throws IOException {
+    String testID = fryId.toHexString();
+    when(ctx.pathParam("id")).thenReturn(testID);
+
+    assertEquals(1, db.getCollection("todos").countDocuments(eq("_id", new ObjectId(testID))));
+
+    todoController.deleteTodo(ctx);
+
+    verify(ctx).status(HttpStatus.OK);
+
+    assertEquals(0, db.getCollection("todos").countDocuments(eq("_id", new ObjectId(testID))));
+  }
+
+  @Test
+  void tryToDeleteNotFoundUser() throws IOException {
+    String testID = fryId.toHexString();
+    when(ctx.pathParam("id")).thenReturn(testID);
+
+    todoController.deleteTodo(ctx);
+    assertEquals(0, db.getCollection("todos").countDocuments(eq("_id", new ObjectId(testID))));
+
+    assertThrows(NotFoundResponse.class, () -> {
+      todoController.deleteTodo(ctx);
+    });
+
+    verify(ctx).status(HttpStatus.NOT_FOUND);
+
+    // User is still not in the database
+    assertEquals(0, db.getCollection("todos").countDocuments(eq("_id", new ObjectId(testID))));
   }
 
 }
