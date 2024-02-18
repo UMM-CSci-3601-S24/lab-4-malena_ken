@@ -1,6 +1,5 @@
 package umm3601.todo;
 
-
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.regex;
 import static com.mongodb.client.model.Filters.eq;
@@ -10,14 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.bson.Document;
 import org.bson.UuidRepresentation;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.mongojack.JacksonMongoCollection;
-
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
@@ -39,16 +36,14 @@ public class TodoController implements Controller {
   static final int MAX_BODY_LENGTH = 200;
   private static final String CATEGORY_REGEX = "^(software design|groceries|video games|homework)$";
 
-
   public TodoController(MongoDatabase db) {
     todoCollection = JacksonMongoCollection
-    .builder()
-    .build(
-      db, "todos", Todo.class, UuidRepresentation.STANDARD
-    );
+        .builder()
+        .build(
+            db, "todos", Todo.class, UuidRepresentation.STANDARD);
   }
 
- /**
+  /**
    *
    * @param ctx a Javalin HTTP context
    */
@@ -69,15 +64,14 @@ public class TodoController implements Controller {
     }
   }
 
-
   public void getTodos(Context ctx) {
     Bson combinedFilter = constructFilter(ctx);
     Bson sortingOrder = constructSortingOrder(ctx);
 
     ArrayList<Todo> matchingTodos = todoCollection
-      .find(combinedFilter)
-      .sort(sortingOrder)
-      .into(new ArrayList<>());
+        .find(combinedFilter)
+        .sort(sortingOrder)
+        .into(new ArrayList<>());
 
     ctx.json(matchingTodos);
 
@@ -88,9 +82,9 @@ public class TodoController implements Controller {
   /**
    *
    * @param ctx a Javalin HTTP context, which contains the query parameters
-   *    used to construct the filter
+   *            used to construct the filter
    * @return a Bson filter document that can be used in the `find` method
-   *   to filter the database collection of todos
+   *         to filter the database collection of todos
    */
   private Bson constructFilter(Context ctx) {
     List<Bson> filters = new ArrayList<>();
@@ -99,7 +93,6 @@ public class TodoController implements Controller {
       Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(OWNER_KEY)), Pattern.CASE_INSENSITIVE);
       filters.add(regex(OWNER_KEY, pattern));
     }
-
 
     // Combine the list of filters into a single filtering document.
     Bson combinedFilter = filters.isEmpty() ? new Document() : and(filters);
@@ -110,24 +103,24 @@ public class TodoController implements Controller {
   /**
    *
    * @param ctx a Javalin HTTP context, which contains the query parameters
-   *   used to construct the sorting order
+   *            used to construct the sorting order
    * @return a Bson sorting document that can be used in the `sort` method
-   *  to sort the database collection of todos
+   *         to sort the database collection of todos
    */
   private Bson constructSortingOrder(Context ctx) {
 
     String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "owner");
     String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "asc");
-    Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
+    Bson sortingOrder = sortOrder.equals("desc") ? Sorts.descending(sortBy) : Sorts.ascending(sortBy);
     return sortingOrder;
   }
 
-    /**
+  /**
    * Add a new todo using information from the context
    * (as long as the information gives "legal" values to Todo fields)
    *
    * @param ctx a Javalin HTTP context that provides the todo info
-   *  in the JSON body of the request
+   *            in the JSON body of the request
    */
   public void addNewTodo(Context ctx) {
 
@@ -135,26 +128,28 @@ public class TodoController implements Controller {
      * The follow chain of statements uses the Javalin validator system
      * to verify that instance of `Todo` provided in this context is
      * a "legal" todo. It checks the following things (in order):
-     *    - The todo has a value for the owner (`tdo.owner != null`)
-     *    - The todo owner is not blank (`tdo.owner.length > 0`)
-     *    - The provided status is strictly true or false
-     *    - The provided body is not blank (`tdo.body.length > 0`)
-     *    - The provided body is not too long (`tdo.body.length < MAX_BODY_LENGTH`)
-     *    - The provided category is one of "homework", "software design", "video games", or "groceries"
+     * - The todo has a value for the owner (`tdo.owner != null`)
+     * - The todo owner is not blank (`tdo.owner.length > 0`)
+     * - The provided status is strictly true or false
+     * - The provided body is not blank (`tdo.body.length > 0`)
+     * - The provided body is not too long (`tdo.body.length < MAX_BODY_LENGTH`)
+     * - The provided category is one of "homework", "software design",
+     * "video games", or "groceries"
      * If any of these checks fail, the validator will return a
      * `BadRequestResponse` with an appropriate error message.
      */
     Todo newTodo = ctx.bodyValidator(Todo.class)
-    .check(tdo -> tdo.owner != null && tdo.owner.length() > 0, "Todo must have a non-empty owner")
-    .check(tdo -> tdo.status == true || tdo.status == false, "Status must be either true or false")
-    .check(tdo -> tdo.body != null && tdo.body.length() > 0 && tdo.body.length() < MAX_BODY_LENGTH, "Body must not be empty and less than " + MAX_BODY_LENGTH)
-    .check(tdo -> tdo.category != null && CATEGORY_REGEX.contains(tdo.category), "Category must be one of " + CATEGORY_REGEX)
-    .get();
+        .check(tdo -> tdo.owner.length() > 0, "Todo must have a non-empty owner")
+        .check(tdo -> tdo.status = true | false, "Status must be either true or false")
+        .check(tdo -> tdo.body != null & tdo.body.length() > 0 && tdo.body.length() < MAX_BODY_LENGTH,
+            "Body must not be empty and less than " + MAX_BODY_LENGTH)
+        .check(tdo -> tdo.category != null & CATEGORY_REGEX.contains(tdo.category),
+            "Category must be one of " + CATEGORY_REGEX)
+        .get();
 
     // Insert the new todo into the database
     todoCollection.insertOne(newTodo);
 
-    // Set the JSON response to be the `_id` of the newly created todo.
     // This gives the client the opportunity to know the ID of the new todo,
     // which it can use to perform further operations (e.g., display the todo).
     ctx.json(Map.of("id", newTodo._id));
@@ -172,4 +167,3 @@ public class TodoController implements Controller {
   }
 
 }
-
