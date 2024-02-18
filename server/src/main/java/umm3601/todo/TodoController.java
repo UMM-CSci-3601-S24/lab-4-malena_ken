@@ -119,25 +119,26 @@ public class TodoController implements Controller {
     return sortingOrder;
   }
 
-  public void addRoutes(Javalin server) {
-    server.get(API_TODO_BY_ID, this::getTodo);
-    server.get(API_TODOS, this::getTodos);
-  }
-
 
 
 public void deleteTodo(Context ctx) {
-    String id = ctx.pathParam("id");
-    DeleteResult deleteResult = todoCollection.deleteOne(eq("_id", new ObjectId(id)));
-    // We should have deleted 1 or 0 users, depending on whether `id` is a valid user ID.
-    if (deleteResult.getDeletedCount() != 1) {
-      ctx.status(HttpStatus.NOT_FOUND);
-      throw new NotFoundResponse(
-        "Was unable to delete ID "
-          + id
-          + "; perhaps illegal ID or an ID for an item not in the system?");
-    }
-    ctx.status(HttpStatus.OK);
+  String id = ctx.pathParam("id");
+  DeleteResult deleteResult = todoCollection.deleteOne(eq("_id", new ObjectId(id)));
+  // We should have deleted 1 or 0 users, depending on whether `id` is a valid user ID.
+  if (deleteResult.getDeletedCount() != 1) {
+    ctx.status(HttpStatus.NOT_FOUND);
+    throw new NotFoundResponse(
+      "Was unable to delete ID "
+        + id
+        + "; perhaps illegal ID or an ID for an item not in the system?");
+  }
+  ctx.status(HttpStatus.OK);
+}
+
+  public void addRoutes(Javalin server) {
+    server.get(API_TODO_BY_ID, this::getTodo);
+    server.get(API_TODOS, this::getTodos);
+    server.delete(API_TODO_BY_ID, this::deleteTodo);
   }
 
 
