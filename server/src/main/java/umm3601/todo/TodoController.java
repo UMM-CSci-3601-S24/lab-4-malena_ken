@@ -117,7 +117,6 @@ public class TodoController implements Controller {
   }
 
 
-
 public void deleteTodo(Context ctx) {
   String id = ctx.pathParam("id");
   DeleteResult deleteResult = todoCollection.deleteOne(eq("_id", new ObjectId(id)));
