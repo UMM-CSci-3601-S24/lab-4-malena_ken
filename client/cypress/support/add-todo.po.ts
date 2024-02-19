@@ -1,4 +1,4 @@
-import {Todo} from 'src/app/todos/todo';
+import { Todo } from 'src/app/todos/todo';
 
 export class AddTodoPage {
 
@@ -39,8 +39,6 @@ export class AddTodoPage {
       .get(`${this.dropDownSelector}:contains("${value}")`).click();
   }
 
- // mat-option [value]='true'
-
   getFormField(fieldName: string) {
     return cy.get(`${this.formFieldSelector} [formcontrolname=${fieldName}]`);
   }
@@ -53,7 +51,7 @@ export class AddTodoPage {
     this.getFormField(this.ownerFieldName).type(newTodo.owner);
     this.getFormField(this.categoryFieldName).type(newTodo.category);
     this.getFormField(this.bodyFieldName).type(newTodo.body);
-    this.getFormField(this.statusFieldName).type(newTodo.status);
+    this.selectMatSelectBoolean(this.getFormField(this.statusFieldName), newTodo.status ? 'Complete' : 'Incomplete');
     return this.addTodoButton().click();
   }
 

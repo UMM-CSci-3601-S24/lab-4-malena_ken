@@ -2,7 +2,7 @@ import { TodoListPage } from "cypress/support/todo-list.po";
 
 const page = new TodoListPage();
 
-describe('Todo list',() => {
+describe('Todo list', () => {
 
   beforeEach(() => {
     page.navigateTo();
@@ -37,7 +37,7 @@ describe('Todo list',() => {
 
     // All of the todo cards should have the owner we are filtering by
     page.getTodoCards().find('.todo-card-owner').each($card => {
-      cy.wrap($card).should('have.text','Blanche');
+      cy.wrap($card).should('have.text', 'Blanche');
     })
 
     page.getTodoCards().find('.todo-card-owner')
@@ -52,7 +52,7 @@ describe('Todo list',() => {
 
     page.getTodoCards().should('have.lengthOf', 1);
     page.getTodoCards().find('.todo-card-owner').each($card => {
-      cy.wrap($card).should('have.text','Blanche');
+      cy.wrap($card).should('have.text', 'Blanche');
     })
   });
 
@@ -72,5 +72,5 @@ describe('Todo list',() => {
       .should('not.contain.text', 'homework')
       .should('not.contain.text', 'video games')
       .should('not.contain.text', 'software design');
-});
+  });
 });
