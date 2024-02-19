@@ -19,6 +19,7 @@ const routes: Routes = [
   {path: 'users/:id', component: UserProfileComponent, title: 'User Profile'},
   {path: 'companies', component: CompanyListComponent, title: 'Companies'},
   {path: 'todos', component: TodoListComponent, title: 'Todos'},
+  {path: 'todos/new', component: AddTodoComponent, title: 'Add Todo'},
   {path: 'todos/:id', component: TodoProfileComponent, title: 'Todo Details'},
   {path: 'todos/new', component: AddTodoComponent, title: 'Add Todo'},
 

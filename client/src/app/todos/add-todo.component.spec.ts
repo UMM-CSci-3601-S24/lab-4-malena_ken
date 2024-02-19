@@ -141,13 +141,13 @@ describe('AddTodoComponent', () => {
       expect(statusControl.hasError('required')).toBeTruthy();
     });
 
-    it('should allow "Incomplete"', () => {
-      statusControl.setValue('Incomplete');
+    it('should allow "Completed"', () => {
+      statusControl.setValue(true);
       expect(statusControl.valid).toBeTruthy();
     });
 
-    it('should allow "Complete"', () => {
-      statusControl.setValue('Complete');
+    it('should allow "Incomplete"', () => {
+      statusControl.setValue(false);
       expect(statusControl.valid).toBeTruthy();
     });
 
