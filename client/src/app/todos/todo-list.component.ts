@@ -114,11 +114,16 @@ export class TodoListComponent implements OnInit, OnDestroy {
    */
   public updateFilter(): void {
     this.filteredTodos = this.todoService.filterTodos(
-      this.serverFilteredTodos, {body: this.todoBody, status: this.todoStatus, category: this.todoCategory, limit: this.limit});
+      this.serverFilteredTodos, {owner: this.todoOwner, body: this.todoBody, status: this.todoStatus, category: this.todoCategory, limit: this.limit});
   }
 
   public updateSorting(){
     this.filteredTodos = this.todoService.sortTodos(this.serverFilteredTodos,this.todoSortBy)
+  }
+
+  updateSortAndFilter(): void { // This allows us to update both sorting and filtering at the same time
+    this.updateSorting();       // This helps the combination of sorting and filtering to work
+    this.updateFilter();  // limit is the last method to be called, so it will be the last to be updated
   }
 
   /**

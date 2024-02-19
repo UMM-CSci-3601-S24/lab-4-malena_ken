@@ -69,16 +69,18 @@ export class TodoService {
       filteredTodos = filteredTodos.filter(todo => todo.owner.toLowerCase().indexOf(filters.owner) !== -1);
     }
 
+        // Filters by status
+        if (filters.status !== undefined) {
+          filteredTodos = filteredTodos.filter(todo => todo.status === filters.status);
+        }
+
+
     // Filters by body
     if (filters.body) {
       filters.body = filters.body.toLowerCase();
       filteredTodos = filteredTodos.filter(todo => todo.body.toLowerCase().indexOf(filters.body) !== -1);
     }
 
-    // Filters by status
-    if (filters.status !== undefined) {
-      filteredTodos = filteredTodos.filter(todo => todo.status === filters.status);
-    }
     // Filter by category
     if (filters.category) {
       filters.category = filters.category.toLowerCase();

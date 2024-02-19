@@ -29,7 +29,7 @@
 
           <mat-form-field class="input-field">
             <mat-label>Category</mat-label>
-            <mat-select (selectionChange)="getTodosFromServer()" [(ngModel)]="todoCategory"
+            <mat-select (selectionChange)="updateFilter()" [(ngModel)]="todoCategory"
               data-test="todoCategorySelect">
               <mat-option>--</mat-option>
               <mat-option value="video games">Video Games</mat-option>
@@ -42,7 +42,7 @@
 
           <mat-form-field class="input-field">
             <mat-label>Sort By</mat-label>
-            <mat-select (selectionChange)="updateSorting()" [(ngModel)]="todoSortBy" data-test="todoSortSelect">
+            <mat-select (selectionChange)="updateSortAndFilter()" [(ngModel)]="todoSortBy" data-test="todoSortSelect">
               <mat-option>--</mat-option>
               <mat-option value='owner'>Owner</mat-option>
               <mat-option value='body'>Body</mat-option>
