@@ -24,6 +24,11 @@
                 <mat-option [value]='true'>Complete</mat-option>
                 <mat-option [value]='false'>Incomplete</mat-option>
               </mat-select>
+              @if (formControlHasError('status')) {
+                <mat-error data-test="statusError">
+                  {{getErrorMessage('status')}}
+                </mat-error>
+              }
             </mat-form-field>
 
             <mat-form-field>
@@ -43,8 +48,7 @@
 
             <mat-form-field>
               <mat-label>Body</mat-label>
-              <input matInput formControlName="body"
-                required>
+              <input matInput formControlName="body" required>
               @if (formControlHasError('body')) {
                 <mat-error data-test="bodyError">
                   {{getErrorMessage('body')}}

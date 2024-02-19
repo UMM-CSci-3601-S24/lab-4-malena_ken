@@ -62,7 +62,7 @@ export class AddTodoComponent {
 
     status: [
       {type: 'required', message: 'Status is required'},
-      {type: "pattern", message: 'Status must be true or false'}
+      {type: "pattern", message: 'Status must be true or false'},
     ],
   };
 
