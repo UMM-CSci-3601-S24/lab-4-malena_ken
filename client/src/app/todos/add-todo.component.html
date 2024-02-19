@@ -10,11 +10,11 @@
 
             <mat-form-field>
               <mat-label>Owner</mat-label>
-                <input matInput formControlName="owner" required>
+              <input matInput formControlName="owner" required>
               @if (formControlHasError('owner')) {
-                <mat-error data-test="ownerError">
-                  {{getErrorMessage('owner')}}
-                </mat-error>
+              <mat-error data-test="ownerError">
+                {{getErrorMessage('owner')}}
+              </mat-error>
               }
             </mat-form-field>
 
@@ -24,6 +24,11 @@
                 <mat-option [value]='true'>Complete</mat-option>
                 <mat-option [value]='false'>Incomplete</mat-option>
               </mat-select>
+              @if (formControlHasError('status')) {
+              <mat-error data-test="statusError">
+                {{getErrorMessage('status')}}
+              </mat-error>
+              }
             </mat-form-field>
 
             <mat-form-field>
@@ -35,16 +40,15 @@
                 <mat-option value="homework">Homework</mat-option>
               </mat-select>
               @if (formControlHasError('category')) {
-                <mat-error data-test="categoryError">
-                  {{getErrorMessage('category')}}
-                </mat-error>
+              <mat-error data-test="categoryError">
+                {{getErrorMessage('category')}}
+              </mat-error>
               }
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>Body</mat-label>
-              <input matInput formControlName="body"
-                required>
+              <input matInput formControlName="body" required>
               @if (formControlHasError('body')) {
                 <mat-error data-test="bodyError">
                   {{getErrorMessage('body')}}

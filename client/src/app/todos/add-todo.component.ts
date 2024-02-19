@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { TodoService } from './todo.service';
@@ -12,11 +12,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-    selector: 'app-add-todo',
-    templateUrl: './add-todo.component.html',
-    styleUrls: ['./add-todo.component.scss'],
-    standalone: true,
-    imports: [FormsModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule, MatButtonModule]
+  selector: 'app-add-todo',
+  templateUrl: './add-todo.component.html',
+  styleUrls: ['./add-todo.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule, MatButtonModule]
 })
 export class AddTodoComponent {
 
@@ -28,7 +28,7 @@ export class AddTodoComponent {
       Validators.maxLength(50),
     ])),
 
-    status: new UntypedFormControl('false', Validators.compose([
+    status: new FormControl(undefined, Validators.compose([
       Validators.required,
       Validators.pattern('^(true|false)$'),
     ])),
@@ -37,6 +37,7 @@ export class AddTodoComponent {
     // We will require the email, though.
     body: new FormControl('', Validators.compose([
       Validators.required,
+      Validators.maxLength(200),
     ])),
 
     category: new FormControl('', Validators.compose([
@@ -47,22 +48,22 @@ export class AddTodoComponent {
 
   readonly addTodoValidationMessages = {
     owner: [
-      {type: 'required', message: 'Owner is required'},
-      {type: 'minlength', message: 'Owner must be at least 2 characters long'},
-      {type: 'maxlength', message: 'Owner cannot be more than 50 characters long'},
+      { type: 'required', message: 'Owner is required' },
+      { type: 'minlength', message: 'Owner must be at least 2 characters long' },
+      { type: 'maxlength', message: 'Owner cannot be more than 50 characters long' },
     ],
 
     body: [
-      {type: 'required', message: 'Body is required'},
+      { type: 'required', message: 'Body is required' },
     ],
 
     category: [
-      {type: 'required', message: 'Category is required'}
+      { type: 'required', message: 'Category is required' }
     ],
 
     status: [
-      {type: 'required', message: 'Status is required'},
-      {type: "pattern", message: 'Status must be true or false'}
+      { type: 'required', message: 'Status is required' },
+      { type: "pattern", message: 'Status must be true or false' },
     ],
   };
 
@@ -78,7 +79,7 @@ export class AddTodoComponent {
   }
 
   getErrorMessage(owner: keyof typeof this.addTodoValidationMessages): string {
-    for(const {type, message} of this.addTodoValidationMessages[owner]) {
+    for (const { type, message } of this.addTodoValidationMessages[owner]) {
       if (this.addTodoForm.get(owner).hasError(type)) {
         return message;
       }
