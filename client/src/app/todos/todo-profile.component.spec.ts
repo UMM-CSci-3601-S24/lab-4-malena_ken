@@ -15,7 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AddTodoComponent } from './add-todo.component';
+
 
 
 describe('TodoProfileComponent', () => {
@@ -111,6 +111,9 @@ describe('TodoProfileComponent', () => {
     expect(getTodoSpy).toHaveBeenCalledWith(fryId);
   });
 
+});
+
+
   describe('DeleteTodo()', () => {
     let component: TodoProfileComponent;
     let fixture: ComponentFixture<TodoProfileComponent>;
@@ -126,17 +129,13 @@ describe('TodoProfileComponent', () => {
           MatInputModule,
           BrowserAnimationsModule,
           RouterTestingModule.withRoutes([
-              { path: 'todos/1', component: TodoProfileComponent }
+            { path: 'todos/1', component: TodoProfileComponent }
           ]),
           HttpClientTestingModule
         ],
-        declarations: [AddTodoComponent, TodoProfileComponent],
         providers: [TodoService]
-      })
-      .compileComponents();
-    });
+      }).compileComponents();
 
-    beforeEach(() => {
       fixture = TestBed.createComponent(TodoProfileComponent);
       component = fixture.componentInstance;
       todoService = TestBed.inject(TodoService);
@@ -149,4 +148,4 @@ describe('TodoProfileComponent', () => {
     });
   });
 
-});
+
