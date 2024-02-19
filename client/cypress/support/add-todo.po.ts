@@ -32,6 +32,15 @@ export class AddTodoPage {
       .get(`${this.dropDownSelector}[value="${value}"]`).click();
   }
 
+  selectMatSelectBoolean(select: Cypress.Chainable, value: 'Complete' | 'Incomplete') {
+    // Find and click the drop down
+    return select.click()
+      // Select and click the desired value from the resulting menu
+      .get(`${this.dropDownSelector}:contains("${value}")`).click();
+  }
+
+ // mat-option [value]='true'
+
   getFormField(fieldName: string) {
     return cy.get(`${this.formFieldSelector} [formcontrolname=${fieldName}]`);
   }
@@ -44,7 +53,7 @@ export class AddTodoPage {
     this.getFormField(this.ownerFieldName).type(newTodo.owner);
     this.getFormField(this.categoryFieldName).type(newTodo.category);
     this.getFormField(this.bodyFieldName).type(newTodo.body);
-    this.selectMatSelectValue(this.getFormField(this.statusFieldName), newTodo.status);
+    this.getFormField(this.statusFieldName).type(newTodo.status);
     return this.addTodoButton().click();
   }
 

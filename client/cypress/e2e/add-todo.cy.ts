@@ -23,7 +23,7 @@ describe('Add todo', () => {
     page.addTodoButton().should('be.disabled');
     page.getFormField('body').type('test');
     page.addTodoButton().should('be.disabled');
-    page.selectMatSelectValue(page.getFormField('status'), 'complete');
+    page.selectMatSelectBoolean(page.getFormField('status'), 'Complete');
     // all the required fields have valid input, then it should be enabled
     page.addTodoButton().should('be.enabled');
   });

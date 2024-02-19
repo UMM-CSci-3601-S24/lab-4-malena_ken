@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { TodoService } from './todo.service';
@@ -28,7 +28,7 @@ export class AddTodoComponent {
       Validators.maxLength(50),
     ])),
 
-    status: new UntypedFormControl('false', Validators.compose([
+    status: new FormControl(undefined, Validators.compose([
       Validators.required,
       Validators.pattern('^(true|false)$'),
     ])),
