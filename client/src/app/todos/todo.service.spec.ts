@@ -303,5 +303,28 @@ describe('TodoService', () => {
   });
 
 
+  describe('Removing a todo using `deleteUser()`', () => {
+    it('talks to the right endpoint and is called once', waitForAsync(() => {
+      const todo_id = 'pat_id';
+      const expected_http_response = { todo_id };
+
+      const mockedMethod = spyOn(httpClient, 'delete')
+        .and
+        .returnValue(of(expected_http_response));
+
+      todoService.deleteTodo(todo_id).subscribe(() => {
+        expect(mockedMethod)
+          .withContext('one call')
+          .toHaveBeenCalledTimes(1);
+        expect(mockedMethod)
+          .withContext('talks to the correct endpoint')
+          .toHaveBeenCalledWith(`${todoService.todoUrl}/pat_id`);
+
+      });
+    }));
+  });
+
+
+
 });
 
