@@ -29,8 +29,14 @@
 
           <mat-form-field class="input-field">
             <mat-label>Category</mat-label>
-            <input matInput data-test="todoCategoryInput" placeholder="Filter by category" [(ngModel)]="todoCategory"
-              (input)="updateFilter()">
+            <mat-select (selectionChange)="getTodosFromServer()" [(ngModel)]="todoCategory"
+              data-test="todoCategorySelect">
+              <mat-option>--</mat-option>
+              <mat-option value="video games">Video Games</mat-option>
+              <mat-option value="software design">Software Design</mat-option>
+              <mat-option value="homework">Homework</mat-option>
+              <mat-option value="groceries">Groceries</mat-option>
+            </mat-select>
             <mat-hint>Filtered on client</mat-hint>
           </mat-form-field>
 
@@ -97,3 +103,7 @@
   </div>
   }
 </div>
+
+<button mat-fab class="add-todo-fab" matTooltip="Add Todo" matTooltipPosition="left" routerLink="/todos/new" data-test="addTodoButton">
+  <mat-icon class="md-24" aria-label="Add Todo">add</mat-icon>
+</button>

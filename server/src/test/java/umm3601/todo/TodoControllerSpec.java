@@ -272,7 +272,7 @@ public class TodoControllerSpec {
     String testNewTodo = """
         {
           "owner": "",
-          "status": "complete",
+          "status": true,
           "body": tooLong,
           "category": "shopping"
         }
