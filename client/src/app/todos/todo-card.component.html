@@ -1,5 +1,6 @@
 @if (this.todo) {
-  <mat-card class="todo-card">
+  <mat-card class="todo-card {{ todo.category.split(' ').join('-').toLowerCase() }}">
+
     <mat-card-header>
       <mat-card-title class="todo-card-owner">{{ this.todo.owner }}</mat-card-title>
       <mat-card-subtitle class="todo-card-category">{{ this.todo.category }}</mat-card-subtitle>
@@ -20,7 +21,8 @@
           <mat-list-item>
             <mat-icon matListItemIcon>schedule</mat-icon>
             <p matListItemTitle>Status</p>
-            <p matListItemLine class="todo-card-status">{{ this.todo.status }}</p>
+            <p matListItemLine class="todo-card-status">{{ this.todo.status ? 'Complete' : 'Incomplete' }}</p>
+            <p matListItemLine class="todo-card-body">{{ this.todo.body }}</p>
           </mat-list-item>
           <mat-divider [inset]=true></mat-divider>
         </mat-list>

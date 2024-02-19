@@ -6,6 +6,21 @@
 .todo-card {
   margin-bottom: 10px;
   flex: 1 1 280px;
+  &.software-design {
+    background-color: rgb(250, 143, 131);
+  }
+
+  &.video-games {
+    background-color: rgb(243, 243, 154);
+  }
+
+  &.groceries {
+    background-color: rgb(164, 219, 164);
+  }
+
+  &.homework {
+    background-color: rgb(191, 191, 246);
+  }
 }
 
 .search-card {
