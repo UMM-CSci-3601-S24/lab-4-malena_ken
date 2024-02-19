@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { Location } from '@angular/common';
+import { ComponentFixture, TestBed, fakeAsync, flush, tick, waitForAsync } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -15,6 +16,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 
 
 
@@ -118,6 +121,7 @@ describe('TodoProfileComponent', () => {
     let component: TodoProfileComponent;
     let fixture: ComponentFixture<TodoProfileComponent>;
     let todoService: TodoService;
+    let location: Location;
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
@@ -139,6 +143,7 @@ describe('TodoProfileComponent', () => {
       fixture = TestBed.createComponent(TodoProfileComponent);
       component = fixture.componentInstance;
       todoService = TestBed.inject(TodoService);
+      location = TestBed.inject(Location);
     });
 
     it('should call deleteTodo on TodoService when deleteTodo is called in TodoProfileComponent', () => {
@@ -146,6 +151,24 @@ describe('TodoProfileComponent', () => {
       component.deleteTodo('testId');
       expect(deleteTodoSpy).toHaveBeenCalledWith('testId');
     });
+
+    it('should call deleteTodo() and handle success response', fakeAsync(() => {
+
+      fixture.ngZone.run(() => {
+
+        const deleteTodoSpy = spyOn(todoService, 'deleteTodo');
+        component.deleteTodo('testId');
+
+        expect(deleteTodoSpy).toHaveBeenCalledWith("testId");
+
+        tick();
+
+        expect(location.path()).toBe('/todos');
+
+        flush();
+      });
+    }));
+
   });
 
 
