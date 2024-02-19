@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, waitForAsync } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -9,6 +9,14 @@ import { Todo } from './todo';
 import { TodoCardComponent } from './todo-card.component';
 import { TodoProfileComponent } from './todo-profile.component';
 import { TodoService } from './todo.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AddTodoComponent } from './add-todo.component';
+
 
 describe('TodoProfileComponent', () => {
   let component: TodoProfileComponent;
@@ -102,4 +110,43 @@ describe('TodoProfileComponent', () => {
     });
     expect(getTodoSpy).toHaveBeenCalledWith(fryId);
   });
+
+  describe('DeleteTodo()', () => {
+    let component: TodoProfileComponent;
+    let fixture: ComponentFixture<TodoProfileComponent>;
+    let todoService: TodoService;
+
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          ReactiveFormsModule,
+          MatSnackBarModule,
+          MatCardModule,
+          MatSelectModule,
+          MatInputModule,
+          BrowserAnimationsModule,
+          RouterTestingModule.withRoutes([
+              { path: 'todos/1', component: TodoProfileComponent }
+          ]),
+          HttpClientTestingModule,
+          AddTodoComponent, TodoProfileComponent
+      ],
+        providers: [TodoService]
+      })
+      .compileComponents();
+    }));
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(TodoProfileComponent);
+      component = fixture.componentInstance;
+      todoService = TestBed.inject(TodoService);
+    });
+
+    it('should call deleteTodo on TodoService when deleteTodo is called in TodoProfileComponent', () => {
+      const deleteTodoSpy = spyOn(todoService, 'deleteTodo').and.callThrough();
+      component.deleteTodo('testId');
+      expect(deleteTodoSpy).toHaveBeenCalledWith('testId');
+    });
+  });
+
 });
