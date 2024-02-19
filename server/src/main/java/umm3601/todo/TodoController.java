@@ -7,7 +7,6 @@ import static com.mongodb.client.model.Filters.eq;
 import java.util.regex.Pattern;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.ArrayList;
 
 import org.bson.Document;
@@ -17,7 +16,6 @@ import org.bson.types.ObjectId;
 import org.mongojack.JacksonMongoCollection;
 
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Sorts;
 
 import io.javalin.Javalin;
 import io.javalin.http.BadRequestResponse;
@@ -32,7 +30,6 @@ public class TodoController implements Controller {
   private final JacksonMongoCollection<Todo> todoCollection;
 
   static final String OWNER_KEY = "owner";
-  static final String SORT_ORDER_KEY = "sortorder";
   static final int MAX_BODY_LENGTH = 200;
   private static final String CATEGORY_REGEX = "^(software design|groceries|video games|homework)$";
 
@@ -66,11 +63,9 @@ public class TodoController implements Controller {
 
   public void getTodos(Context ctx) {
     Bson combinedFilter = constructFilter(ctx);
-    Bson sortingOrder = constructSortingOrder(ctx);
 
     ArrayList<Todo> matchingTodos = todoCollection
         .find(combinedFilter)
-        .sort(sortingOrder)
         .into(new ArrayList<>());
 
     ctx.json(matchingTodos);
@@ -101,21 +96,6 @@ public class TodoController implements Controller {
   }
 
   /**
-   *
-   * @param ctx a Javalin HTTP context, which contains the query parameters
-   *            used to construct the sorting order
-   * @return a Bson sorting document that can be used in the `sort` method
-   *         to sort the database collection of todos
-   */
-  private Bson constructSortingOrder(Context ctx) {
-
-    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "owner");
-    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "asc");
-    Bson sortingOrder = sortOrder.equals("desc") ? Sorts.descending(sortBy) : Sorts.ascending(sortBy);
-    return sortingOrder;
-  }
-
-  /**
    * Add a new todo using information from the context
    * (as long as the information gives "legal" values to Todo fields)
    *
@@ -141,10 +121,10 @@ public class TodoController implements Controller {
     Todo newTodo = ctx.bodyValidator(Todo.class)
         .check(tdo -> tdo.owner.length() > 0, "Todo must have a non-empty owner")
         .check(tdo -> tdo.status = true | false, "Status must be either true or false")
-        .check(tdo -> tdo.body != null & tdo.body.length() > 0 && tdo.body.length() < MAX_BODY_LENGTH,
-            "Body must not be empty and less than " + MAX_BODY_LENGTH)
-        .check(tdo -> tdo.category != null & CATEGORY_REGEX.contains(tdo.category),
-            "Category must be one of " + CATEGORY_REGEX)
+        .check(tdo -> tdo.body.length() > 0, "Body must not be empty")
+        .check(tdo -> tdo.body.length() < MAX_BODY_LENGTH, "Body must be less than 200 characters")
+        .check(tdo -> tdo.category.length() > 0, "Category cannot be empty")
+        .check(tdo -> CATEGORY_REGEX.contains(tdo.category),"Must be existing category")
         .get();
 
     // Insert the new todo into the database

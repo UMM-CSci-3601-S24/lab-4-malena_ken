@@ -46,7 +46,6 @@ import io.javalin.json.JavalinJackson;
 import io.javalin.validation.BodyValidator;
 import io.javalin.validation.ValidationException;
 
-
 public class TodoControllerSpec {
 
   @SuppressWarnings({ "MagicNumber" })
@@ -162,11 +161,9 @@ public class TodoControllerSpec {
   @Test
   void canGetTodosWithOwner() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(TodoController.OWNER_KEY, Arrays.asList(new String[] {"Fry"}));
-    queryParams.put(TodoController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
+    queryParams.put(TodoController.OWNER_KEY, Arrays.asList(new String[] { "Fry" }));
     when(ctx.queryParamMap()).thenReturn(queryParams);
     when(ctx.queryParam(TodoController.OWNER_KEY)).thenReturn("Fry");
-    when(ctx.queryParam(TodoController.SORT_ORDER_KEY)).thenReturn("desc");
 
     todoController.getTodos(ctx);
 
@@ -211,8 +208,7 @@ public class TodoControllerSpec {
     });
   }
 
-
-@Test
+  @Test
   void addTodo() throws IOException {
     String testNewTodo = """
         {
@@ -244,8 +240,6 @@ public class TodoControllerSpec {
 
   }
 
-
-
   @Test
   void addInvalidOwner() throws IOException {
     String testNewTodo = """
@@ -254,7 +248,6 @@ public class TodoControllerSpec {
           "status": true,
           "body": "testers",
           "category": "homework"
-
         }
         """;
     when(ctx.bodyValidator(Todo.class))
@@ -265,16 +258,33 @@ public class TodoControllerSpec {
     });
   }
 
-
   @Test
   void add201BodyTodo() throws IOException {
     String tooLong = "t".repeat(TodoController.MAX_BODY_LENGTH + 1);
+    String testNewTodo = String.format("""
+        {
+          "owner": "Steve",
+          "status": true,
+          "body": "%s",
+          "category": "homework"
+        }
+        """, tooLong);
+    when(ctx.bodyValidator(Todo.class))
+        .then(value -> new BodyValidator<Todo>(testNewTodo, Todo.class, javalinJackson));
+
+    assertThrows(ValidationException.class, () -> {
+      todoController.addNewTodo(ctx);
+    });
+  }
+
+  @Test
+  void addInvalidBody() throws IOException {
     String testNewTodo = """
         {
-          "owner": "",
+          "owner": "Steve",
           "status": true,
-          "body": tooLong,
-          "category": "shopping"
+          "body": "",
+          "category": "homework"
         }
         """;
     when(ctx.bodyValidator(Todo.class))
@@ -293,7 +303,24 @@ public class TodoControllerSpec {
           "status": "complete",
           "body": "testers",
           "category": "homework"
+        }
+        """;
+    when(ctx.bodyValidator(Todo.class))
+        .then(value -> new BodyValidator<Todo>(testNewTodo, Todo.class, javalinJackson));
 
+    assertThrows(ValidationException.class, () -> {
+      todoController.addNewTodo(ctx);
+    });
+  }
+
+  @Test
+  void addEmptyCategory() throws IOException {
+    String testNewTodo = """
+        {
+          "owner": "Steve",
+          "status": true,
+          "body": "testers",
+          "category": ""
         }
         """;
     when(ctx.bodyValidator(Todo.class))
@@ -312,7 +339,6 @@ public class TodoControllerSpec {
           "status": true,
           "body": "testers",
           "category": "shopping"
-
         }
         """;
     when(ctx.bodyValidator(Todo.class))
