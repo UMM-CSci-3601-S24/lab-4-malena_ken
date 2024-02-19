@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -116,8 +116,8 @@ describe('TodoProfileComponent', () => {
     let fixture: ComponentFixture<TodoProfileComponent>;
     let todoService: TodoService;
 
-    beforeEach(async(() => {
-      TestBed.configureTestingModule({
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
         imports: [
           ReactiveFormsModule,
           MatSnackBarModule,
@@ -128,13 +128,13 @@ describe('TodoProfileComponent', () => {
           RouterTestingModule.withRoutes([
               { path: 'todos/1', component: TodoProfileComponent }
           ]),
-          HttpClientTestingModule,
-          AddTodoComponent, TodoProfileComponent
-      ],
+          HttpClientTestingModule
+        ],
+        declarations: [AddTodoComponent, TodoProfileComponent],
         providers: [TodoService]
       })
       .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
       fixture = TestBed.createComponent(TodoProfileComponent);
