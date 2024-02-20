@@ -10,13 +10,16 @@ import { TodoCardComponent } from './todo-card.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatList, MatListItem } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
     selector: 'app-todo-profile',
     templateUrl: './todo-profile.component.html',
     styleUrls: ['./todo-profile.component.scss'],
     standalone: true,
-    imports: [TodoCardComponent, MatCardModule, MatIconButton, MatIconModule]
+    imports: [TodoCardComponent, MatCardModule, MatList, MatIcon, MatDivider, MatListItem]
 })
 export class TodoProfileComponent implements OnInit, OnDestroy {
   todo: Todo;

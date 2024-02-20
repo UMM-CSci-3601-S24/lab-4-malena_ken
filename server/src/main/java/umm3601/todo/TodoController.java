@@ -157,10 +157,10 @@ public void deleteTodo(Context ctx) {
     Todo newTodo = ctx.bodyValidator(Todo.class)
         .check(tdo -> tdo.owner.length() > 0, "Todo must have a non-empty owner")
         .check(tdo -> tdo.status = true | false, "Status must be either true or false")
-        .check(tdo -> tdo.body != null & tdo.body.length() > 0 && tdo.body.length() < MAX_BODY_LENGTH,
-            "Body must not be empty and less than " + MAX_BODY_LENGTH)
-        .check(tdo -> tdo.category != null & CATEGORY_REGEX.contains(tdo.category),
-            "Category must be one of " + CATEGORY_REGEX)
+        .check(tdo -> tdo.body.length() > 0, "Body must not be empty")
+        .check(tdo -> tdo.body.length() < MAX_BODY_LENGTH, "Body must be less than 200 characters")
+        .check(tdo -> tdo.category.length() > 0, "Category cannot be empty")
+        .check(tdo -> CATEGORY_REGEX.contains(tdo.category), "Must be existing category")
         .get();
 
     // Insert the new todo into the database
