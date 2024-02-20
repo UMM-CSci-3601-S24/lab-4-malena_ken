@@ -124,7 +124,7 @@ public class TodoController implements Controller {
         .check(tdo -> tdo.body.length() > 0, "Body must not be empty")
         .check(tdo -> tdo.body.length() < MAX_BODY_LENGTH, "Body must be less than 200 characters")
         .check(tdo -> tdo.category.length() > 0, "Category cannot be empty")
-        .check(tdo -> CATEGORY_REGEX.contains(tdo.category),"Must be existing category")
+        .check(tdo -> CATEGORY_REGEX.contains(tdo.category),  "Must be existing category")
         .get();
 
     // Insert the new todo into the database
