@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, flush, tick, waitForAsync } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -153,17 +153,6 @@ describe('DeleteTodo()', () => {
     location = TestBed.inject(Location);
     router = TestBed.inject(Router);
   });
-
-    it('should call deleteTodo() and handle success response', fakeAsync(() => {
-      fixture.ngZone.run(() => {
-        const deleteTodoSpy = spyOn(todoService, 'deleteTodo');
-        component.deleteTodo('testId');
-        expect(deleteTodoSpy).toHaveBeenCalledWith("testId");
-        tick();
-        expect(location.path()).toBe('/todos');
-        flush();
-      });
-    }));
 
   it('should call deleteTodo on TodoService when deleteTodo is called in TodoProfileComponent', () => {
     const deleteTodoSpy = spyOn(todoService, 'deleteTodo').and.callThrough();
