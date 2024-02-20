@@ -1,0 +1,43 @@
+.error-card {
+  background-color: #b00020;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.todo-card-profile {
+  text-transform: capitalize;
+  -webkit-text-fill-color: black;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%;  // Adjust as needed
+  border-style: outset; // This will ensure that the content of the card is always visible and not cut off by the browser
+
+  &.software-design {
+    background-color: rgb(250, 143, 131);
+  }
+
+  &.video-games {
+    background-color: rgb(243, 243, 154);
+  }
+
+  &.groceries {
+    background-color: rgb(164, 219, 164);
+  }
+
+  &.homework {
+    background-color: rgb(191, 191, 246);
+
+  }
+}
+
+.profile-list {
+  width: 100%;
+  margin-left: 60;
+  padding: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}

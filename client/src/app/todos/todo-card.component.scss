@@ -1,0 +1,62 @@
+// This sets the font size to be the same for both the Angular Material
+// list item title and list item line.
+.mat-mdc-list-item {
+  &-title,
+  &-line {
+    font-size: 1rem;
+  }
+}
+
+// Capitalize the todo owner when displaying it in the todo card.
+.todo-card-owner {
+  text-transform: capitalize;
+  -webkit-text-fill-color: black;
+}
+
+.todo-card-category {
+  text-transform: capitalize;
+  -webkit-text-fill-color: black;
+}
+
+.todo-card {
+  text-transform: capitalize;
+  margin-bottom: 10px;
+  max-width: 800px;
+  width: relative;
+  min-width: 300px;
+  height: relative min 300px;
+  border-style: inset;
+
+
+
+  &.software-design {
+    background-color: rgb(250, 143, 131);
+  }
+
+  &.video-games {
+    background-color: rgb(243, 243, 154);
+  }
+
+  &.groceries {
+    background-color: rgb(164, 219, 164);
+  }
+
+  &.homework {
+    background-color: rgb(191, 191, 246);
+
+  }
+}
+
+
+
+.mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+
+.todo-button {
+  text-transform: capitalize;
+  -webkit-text-fill-color: black;
+}
+

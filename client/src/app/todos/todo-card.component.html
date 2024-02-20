@@ -1,0 +1,24 @@
+@if (this.todo) {
+  <mat-card class="todo-card {{ todo.category.split(' ').join('-').toLowerCase() }}">
+
+    <mat-card-header>
+      <mat-card-title class="todo-card-owner">{{ this.todo.owner }}</mat-card-title>
+      <mat-card-title class="todo-card-category">{{ this.todo.category }}</mat-card-title>
+      <mat-card-title>
+        <mat-icon class="status-icon" [style.color]="this.todo.status ? 'green' : 'red'">
+          {{ this.todo.status ? 'check_circle' : 'cancel' }}
+        </mat-icon>
+      </mat-card-title>
+      <mat-card-subtitle class="todo-card-body">{{ this.todo.body }}</mat-card-subtitle>
+    </mat-card-header>
+    @if (!this.simple) {
+      <mat-card-content>
+      </mat-card-content>
+    }
+    @if (this.simple) {
+      <mat-card-actions>
+        <button class="todo-button" mat-button data-test="viewProfileButton" [routerLink]="['/todos', this.todo._id]">View Todo</button>
+      </mat-card-actions>
+    }
+</mat-card>
+}
