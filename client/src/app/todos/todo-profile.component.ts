@@ -8,13 +8,16 @@ import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { TodoCardComponent } from './todo-card.component';
 
 import { MatCardModule } from '@angular/material/card';
+import { MatList, MatListItem } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
     selector: 'app-todo-profile',
     templateUrl: './todo-profile.component.html',
     styleUrls: ['./todo-profile.component.scss'],
     standalone: true,
-    imports: [TodoCardComponent, MatCardModule]
+    imports: [TodoCardComponent, MatCardModule, MatList, MatIcon, MatDivider, MatListItem]
 })
 export class TodoProfileComponent implements OnInit, OnDestroy {
   todo: Todo;
