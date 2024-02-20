@@ -355,6 +355,7 @@ public class TodoControllerSpec {
 
     // User is still not in the database
     assertEquals(0, db.getCollection("todos").countDocuments(eq("_id", new ObjectId(testID))));
+  }
 
   @Test
   void addEmptyCategory() throws IOException {
