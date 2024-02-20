@@ -1,14 +1,25 @@
+import { Location } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { ActivatedRouteStub } from '../../testing/activated-route-stub';
 import { MockTodoService } from '../../testing/todo.service.mock';
 import { Todo } from './todo';
 import { TodoCardComponent } from './todo-card.component';
 import { TodoProfileComponent } from './todo-profile.component';
 import { TodoService } from './todo.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
+
+
 
 describe('TodoProfileComponent', () => {
   let component: TodoProfileComponent;
@@ -102,4 +113,62 @@ describe('TodoProfileComponent', () => {
     });
     expect(getTodoSpy).toHaveBeenCalledWith(fryId);
   });
+
 });
+
+
+describe('DeleteTodo()', () => {
+  let component: TodoProfileComponent;
+  let fixture: ComponentFixture<TodoProfileComponent>;
+  let todoService: TodoService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  let location: Location;
+  let router: Router;
+  const fryId = 'fry_id';
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const activatedRoute: ActivatedRouteStub = new ActivatedRouteStub({
+    id : fryId
+  });
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        ReactiveFormsModule,
+        MatSnackBarModule,
+        MatCardModule,
+        MatSelectModule,
+        MatInputModule,
+        BrowserAnimationsModule,
+        RouterTestingModule.withRoutes([
+          { path: 'todos/1', component: TodoProfileComponent }
+        ]),
+        HttpClientTestingModule
+      ],
+      providers: [TodoService]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TodoProfileComponent);
+    component = fixture.componentInstance;
+    todoService = TestBed.inject(TodoService);
+    location = TestBed.inject(Location);
+    router = TestBed.inject(Router);
+  });
+
+  it('should call deleteTodo on TodoService when deleteTodo is called in TodoProfileComponent', () => {
+    const deleteTodoSpy = spyOn(todoService, 'deleteTodo').and.callThrough();
+    component.deleteTodo(fryId);
+    expect(deleteTodoSpy).toHaveBeenCalledWith(fryId);
+  });
+
+  it('should delete a todo and navigate to /todos', () => {
+    const navigateSpy = spyOn(router, 'navigate');
+    const deleteTodoSpy = spyOn(todoService, 'deleteTodo').and.returnValue(of(null));
+
+    component.deleteTodo('testId');
+
+    expect(deleteTodoSpy).toHaveBeenCalledWith('testId');
+    expect(navigateSpy).toHaveBeenCalledWith(['/todos']);
+  });
+});
+
+

@@ -49,5 +49,9 @@
       </mat-card-content>
     </mat-card>
     }
+
+    <button mat-fab class="remove-todo-fab" matTooltip="Remove Todo" matTooltipPosition="left" (click)="deleteTodo(todo._id)" data-test="removeTodoButton">
+      <mat-icon class="md-24" aria-label="Remove Todo">delete</mat-icon>
+    </button>
   </div>
 </div>

@@ -115,4 +115,8 @@ export class TodoService {
   addTodo(newTodo: Partial<Todo>): Observable<string> {
     return this.httpClient.post<{id: string}>(this.todoUrl, newTodo).pipe(map(res => res.id));
   }
+
+  deleteTodo(id: string): Observable<void> {
+    return this.httpClient.delete<void>(`/api/todos/${id}`);
+  }
 }

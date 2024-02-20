@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Todo } from './todo';
 import { TodoService } from './todo.service';
@@ -29,7 +29,7 @@ export class TodoProfileComponent implements OnInit, OnDestroy {
   // terminate, allowing the system to free up their resources (like memory).
   private ngUnsubscribe = new Subject<void>();
 
-  constructor(private snackBar: MatSnackBar, private route: ActivatedRoute, private todoService: TodoService) { }
+  constructor(private snackBar: MatSnackBar, private route: ActivatedRoute, private todoService: TodoService, private router: Router) { }
 
   ngOnInit(): void {
     // The `map`, `switchMap`, and `takeUntil` are all RXJS operators, and
@@ -69,6 +69,8 @@ export class TodoProfileComponent implements OnInit, OnDestroy {
           message: _err.error?.title,
         };
       }
+
+
       /*
        * You can uncomment the line that starts with `complete` below to use that console message
        * as a way of verifying that this subscription is completing.
@@ -76,6 +78,12 @@ export class TodoProfileComponent implements OnInit, OnDestroy {
        * and didn't want to clutter the console log
        */
       // complete: () => console.log('We got a new todo, and we are done!'),
+    });
+  }
+
+  deleteTodo(id: string): void {
+    this.todoService.deleteTodo(id).subscribe(() => {
+      this.router.navigate(['/todos']);
     });
   }
 
