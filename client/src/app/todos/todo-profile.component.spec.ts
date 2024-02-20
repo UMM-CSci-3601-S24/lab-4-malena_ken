@@ -146,25 +146,13 @@ describe('TodoProfileComponent', () => {
       location = TestBed.inject(Location);
     });
 
-    it('should call deleteTodo on TodoService when deleteTodo is called in TodoProfileComponent', () => {
-      const deleteTodoSpy = spyOn(todoService, 'deleteTodo').and.callThrough();
-      component.deleteTodo('testId');
-      expect(deleteTodoSpy).toHaveBeenCalledWith('testId');
-    });
-
     it('should call deleteTodo() and handle success response', fakeAsync(() => {
-
       fixture.ngZone.run(() => {
-
         const deleteTodoSpy = spyOn(todoService, 'deleteTodo');
         component.deleteTodo('testId');
-
         expect(deleteTodoSpy).toHaveBeenCalledWith("testId");
-
         tick();
-
         expect(location.path()).toBe('/todos');
-
         flush();
       });
     }));
