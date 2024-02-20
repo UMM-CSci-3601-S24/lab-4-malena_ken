@@ -9,6 +9,7 @@
           {{ this.todo.status ? 'check_circle' : 'cancel' }}
         </mat-icon>
       </mat-card-title>
+      <mat-card-subtitle class="todo-card-body">{{ this.todo.body }}</mat-card-subtitle>
     </mat-card-header>
     @if (!this.simple) {
       <mat-card-content>
