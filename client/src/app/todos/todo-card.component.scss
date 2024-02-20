@@ -10,16 +10,23 @@
 // Capitalize the todo owner when displaying it in the todo card.
 .todo-card-owner {
   text-transform: capitalize;
+  -webkit-text-fill-color: black;
+}
+
+.todo-card-category {
+  text-transform: capitalize;
+  -webkit-text-fill-color: black;
 }
 
 .todo-card {
+  text-transform: capitalize;
   margin-bottom: 10px;
   max-width: 800px;
   width: relative;
   min-width: 300px;
   height: relative min 300px;
-  -webkit-text-fill-color: black;
-   border-style: inset;
+  border-style: inset;
+
 
 
   &.software-design {
@@ -48,4 +55,8 @@
 }
 
 
+.todo-button {
+  text-transform: capitalize;
+  -webkit-text-fill-color: black;
+}
 

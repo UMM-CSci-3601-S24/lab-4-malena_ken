@@ -3,27 +3,24 @@
     @if (this.todo) {
     <mat-card class="todo-card-profile {{ todo.category.split(' ').join('-').toLowerCase() }}">
       <div class="content-container">
-        <mat-card-header>
-          <mat-card-title class="todo-card-owner">{{ todo.owner }}</mat-card-title>
-          <mat-card-subtitle class="todo-card-category">{{ todo.category }}</mat-card-subtitle>
-        </mat-card-header>
         <mat-card-content>
-          <mat-list>
-            <mat-list-item class="status-list-item">
-              <mat-icon matListItemIcon>schedule</mat-icon>
-              <p matListItemTitle>Status</p>
-              <p matListItemLine class="todo-card-status">{{ todo.status ? 'Complete' : 'Incomplete' }}</p>
+          <mat-list class="profile-list">
+            <mat-list-item >
+              <mat-icon matListItemIcon>perm_identity</mat-icon>
+              <p matListItemLine>{{ todo.owner }}</p>
             </mat-list-item>
-            <mat-divider [inset]=true></mat-divider>
-            <p>  </p>
-            <div class="body-content">
-              <mat-list-item class="body-list-item">
+            <mat-list-item>
+              <mat-icon matListItemIcon>reorder</mat-icon>
+              <p matListItemLine>{{ todo.category }}</p>
+            </mat-list-item>
+            <mat-list-item >
+              <mat-icon matListItemIcon>schedule</mat-icon>
+              <p matListItemLine>{{ todo.status ? 'Complete' : 'Incomplete' }}</p>
+            </mat-list-item>
+              <mat-list-item>
                 <mat-icon matListItemIcon>description</mat-icon>
-                <p matListItemTitle>Body</p>
-                <p matListItemLine class="todo-card-body">{{ todo.body }}</p>
+                <p matListItemLine>{{ todo.body }}</p>
               </mat-list-item>
-            </div>
-            <mat-divider [inset]=true></mat-divider>
           </mat-list>
         </mat-card-content>
       </div>
