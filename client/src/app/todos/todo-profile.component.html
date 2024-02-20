@@ -1,30 +1,53 @@
 <div class="flex-row">
   <div class="flex-1">
-    @if (todo) {
-      <app-todo-card [todo]="this.todo"></app-todo-card>
+    @if (this.todo) {
+    <mat-card class="todo-card-profile {{ todo.category.split(' ').join('-').toLowerCase() }}">
+      <div class="content-container">
+        <mat-card-content>
+          <mat-list class="profile-list">
+            <mat-list-item >
+              <mat-icon matListItemIcon>perm_identity</mat-icon>
+              <p matListItemLine>{{ todo.owner }}</p>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListItemIcon>reorder</mat-icon>
+              <p matListItemLine>{{ todo.category }}</p>
+            </mat-list-item>
+            <mat-list-item >
+              <mat-icon matListItemIcon>schedule</mat-icon>
+              <p matListItemLine>{{ todo.status ? 'Complete' : 'Incomplete' }}</p>
+            </mat-list-item>
+              <mat-list-item>
+                <mat-icon matListItemIcon>description</mat-icon>
+                <p matListItemLine>{{ todo.body }}</p>
+              </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </div>
+    </mat-card>
     } @else if (error) {
-      <mat-card class="error-card">
-        <mat-card-content>
-          <h2>
-            {{ error.help }}
-          </h2>
-          <p>
-            {{ error.message }}
-          </p>
-          <p>
-            {{ error.httpResponse }}
-          </p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button color=primary mat-raised-button routerLink="/todos">Back to Todos List</button>
-        </mat-card-actions>
-      </mat-card>
+    <mat-card class="error-card">
+      <mat-card-content>
+        <h2>
+          {{ error.help }}
+        </h2>
+        <p>
+          {{ error.message }}
+        </p>
+        <p>
+          {{ error.httpResponse }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button color=primary mat-raised-button routerLink="/todos">Back to Todos List</button>
+      </mat-card-actions>
+    </mat-card>
     } @else {
-      <mat-card>
-        <mat-card-content>
-          <p>Loading Todo Details data...</p>
-        </mat-card-content>
-      </mat-card>
+    <mat-card>
+      <mat-card-content>
+        <p>Loading Todo Details data...</p>
+      </mat-card-content>
+    </mat-card>
     }
   </div>
 </div>
